@@ -1,0 +1,48 @@
+.search-box {
+    .search-icon {
+        color: #9ea4b0;
+    }
+}
+
+.search-input {
+    border: none;
+
+    &:focus{
+        outline: none !important;
+        box-shadow: none;
+    }
+
+}
+
+.search-result {
+
+    //visibility: hidden;
+
+    width: 300px;
+    position: absolute;
+    background: #fff;
+    z-index: 99;    
+
+    ul {
+        li {            
+            a {
+                display: block;
+                padding: .5rem .8rem .5rem .8rem;
+                border-bottom: 1px solid #eee;
+                //font-size: .8rem;
+  
+                &:hover {
+                    background: #eff6ff;
+                    text-decoration: none;
+                }
+
+                &.active {
+                    background: #eff6ff;
+                    text-decoration: none;
+                }
+
+            }
+        }
+    }
+
+}

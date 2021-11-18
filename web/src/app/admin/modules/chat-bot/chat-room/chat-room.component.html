@@ -1,0 +1,66 @@
+<ng-container *ngIf="loading">
+    <div class="d-flex justify-content-center align-items-center h-100">
+        <img src="/assets/preloader.gif">
+    </div>
+</ng-container>
+<ng-container *ngIf="!loading">
+    <div class="p-4">
+        <h2>Chat room</h2>
+
+        <div class="row" *ngIf="chat_info">
+            <div class="col-8">
+
+                <div class="bg-white border h-100">
+
+                    <div class="p-2 d-flex align-items-end h-100">
+                        <div *ngIf="messages.length > 0" class="w-100">
+                            <ng-container *ngFor="let m of messages">
+                                <div class="d-flex py-1" [ngClass]="{ 'justify-content-end text-right' : !m.author }">
+                                    <div>
+                                        <div class="text-muted" style="font-size: .7rem;" *ngIf="m.author">{{ m.date_created | date:'shortTime' }} (Customer):</div>
+                                        <div class="text-muted" style="font-size: .7rem;" *ngIf="!m.author">{{ m.date_created | date:'shortTime' }} (You):</div>
+                                        {{ m.text }}
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="d-flex align-items-center mt-2">
+                    <input type="text" class="form-control" style="border: 0;" placeholder="Write message"
+                        [(ngModel)]="message" [ngModelOptions]="{standalone: true}" (keyup.enter)="addText(message)"><i
+                        class="fas fa-paper-plane text-primary pointer px-3" (click)="addText(message)"></i>
+                </div>
+            </div>
+            <div class="col-4">
+
+                <div class="btn btn-outline-danger mb-4"><i class="fas fa-flag"></i> Mark as close</div>
+
+
+                <div class="bg-white border p-2" *ngIf="chat_info.user_info">
+
+
+                    <h4>{{ chat_info.user_info.email }}</h4>
+
+
+                    <div>Name: {{ chat_info.user_info.name }}</div>
+
+                    <div class="btn btn-outline-primary btn-sm my-2"><i class="fas fa-envelope-open-text"></i> Send
+                        e-mail</div>
+
+                    <div class="mt-4">
+                        <div class="text-muted">Started at:</div>
+                        {{ chat_info.date_created | date:'medium' }}
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+</ng-container>

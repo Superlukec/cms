@@ -1,0 +1,8 @@
+<div class="d-flex">
+    <h2 mat-dialog-title>Pošlji povpraševanje</h2>
+
+    <div class="text-muted ml-auto" [mat-dialog-close]>
+        <i class="fas fa-times"></i>
+    </div>
+</div>
+<app-v-show-form [id]="data.formId" (completed)="onFormCompleted($event)"></app-v-show-form>

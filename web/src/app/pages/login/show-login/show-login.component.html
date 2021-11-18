@@ -1,0 +1,57 @@
+<div class="h-100 bg-1">
+  <div class="container h-100">
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate class="h-100">
+      <div class="row  h-100">
+        <div class="col  d-flex justify-content-center align-items-center">
+
+          <div class="col-12 col-md-6 login-form">
+
+            <div class="card border-0 shadow" [ngClass]="{ 'animated headShake': showError }">
+              <div class="card-body">
+
+                <div class="my-2 login-title mb-0">Log In</div>
+                <div style="width: 50px; border-bottom: 4px solid blue;"></div>
+
+                <div class="box mt-4">
+
+                  <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="text" class="form-control" formControlName="email" placeholder="user@test.com"
+                      [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                      <div *ngIf="f.email.errors.required">Required field</div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" formControlName="password"
+                      [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                      <div *ngIf="f.password.errors.required">Required field</div>
+                    </div>
+                  </div>
+
+                  <div class="mb-2" style="font-size: .9rem;">
+                    <a class="text-primary" routerLink="./forgot">Forgot password ...</a>
+                  </div>
+
+                  <ng-container *ngIf="showError">
+                    <div class="p-3 mb-2 bg-danger text-white">{{ showErroMessage }}</div>
+                  </ng-container>
+
+                  <button class="mt-4 btn btn-block btn-block btn-outline-primary" type="submit">Log in</button>
+                  
+                  
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

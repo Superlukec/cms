@@ -1,0 +1,18 @@
+.icon-holder {
+
+    &:hover {
+        color: #007bff;
+        cursor: pointer;    
+    }  
+
+    .icon {
+        width: 60px; 
+        font-size: 1.3em; 
+        text-align: center; 
+    }
+
+}
+
+.selected-icon {
+    color: #007bff
+}

@@ -1,0 +1,6 @@
+<app-themes *ngIf="!page"></app-themes>
+
+<ng-container *ngIf="page">
+    <app-configure-theme *ngIf="editTheme || page == 'new'"></app-configure-theme>
+    <app-menu *ngIf="page == 'menu'"></app-menu>
+</ng-container>

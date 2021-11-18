@@ -1,0 +1,82 @@
+<h2 mat-dialog-title>Chatbot template</h2>
+<mat-dialog-content class="mb-2">
+
+    <label>Choose language</label>
+    <select class="form-control form-control-sm" [(ngModel)]="selectedLang"
+        [ngModelOptions]="{standalone: true}" (change)="onChangeLang($event.target.value)">        
+        <option *ngFor="let t of textTemplate" value="{{ t.lang }}">{{ t.lang }}
+        </option>
+    </select>
+
+    <div class="my-3">
+        <label>Intro text</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            <div [generateHTML]="intro_text"></div>
+        </div>
+    </div>
+
+    <div class="my-3">
+        <label>Send message</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            {{ intro_btn }}
+        </div>
+    </div>
+
+    <div class="my-3">
+        <label>Contact text</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            <div [generateHTML]="contact_text"></div>
+        </div>
+    </div>
+
+    <div class="my-3">
+        <label>Your e-mail</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            {{ your_email }}
+        </div>
+    </div>
+
+    <div class="my-3">
+        <label>Your name</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            {{ your_name }}
+        </div>
+    </div>
+
+    <div class="my-3">
+        <label>Privacy text</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            {{ privacy_text }}
+        </div>
+    </div>
+
+    <div class="my-3">
+        <label>Continue text</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            {{ continue_text }}
+        </div>
+    </div>
+
+    <div class="my-3">
+        <label>Welcome text</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            {{ welcome_text }}
+        </div>
+    </div>
+
+    <div class="my-3">
+        <label>Write message</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            {{ write_message }}
+        </div>
+    </div>
+
+    
+
+ 
+
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">
+  <button class="btn btn-secondary mr-2" [mat-dialog-close]>Cancel</button>  
+  <button class="btn btn-primary" (click)="close()">Load template</button>
+</mat-dialog-actions>

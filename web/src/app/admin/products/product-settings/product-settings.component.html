@@ -1,0 +1,62 @@
+<ng-container *ngIf="!loading">
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" class="h-100 d-flex flex-column">
+        <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-4">
+
+
+            <div class="d-flex text-muted">
+            </div>
+
+            <div>
+                <button class="btn btn-primary ml-2" type="submit">Update</button>
+            </div>
+
+
+        </div>
+
+
+        <div class="d-flex h-100">
+            <div class="col h-100" style="overflow-y: auto;">
+
+                <div class="container h-100">
+
+
+                    <div class="p-4">
+
+                        <h2>Product settings</h2>
+
+                        <h4 class="mt-4 mb-3 text-muted">Contact form</h4>
+
+                        <div class="w-50">
+                            <div class="form-group my-3">
+                                <label>Show contact form <br><small class="text-muted">Show form at the specific
+                                        product</small></label>
+                                <select class="form-control w-25" formControlName="showForm" (change)="changeForm()">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+
+                            <ng-container *ngIf="f.showForm.value == 'true' || f.showForm.value == true">
+                                <label>Select contact form<br><small class="text-muted">Select existing form</small></label>
+
+                                <ng-container *ngIf="forms.length > 0">
+                                    <select class="form-control" formControlName="formId">
+                                        <option *ngFor="let f of forms" value="{{ f._id }}">{{ f.name }}</option>
+                                    </select>
+                                </ng-container>
+                                <ng-container *ngIf="forms.length == 0">
+                                    <select class="form-control">
+                                        <option>-- No forms available --</option>
+                                    </select>
+                                </ng-container>
+
+                            </ng-container>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-container>

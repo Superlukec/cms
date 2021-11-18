@@ -1,0 +1,52 @@
+<form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <h2 mat-dialog-title>Form element</h2>
+
+
+                <div class="form-group my-2">
+                    <label>Label</label>
+                    <input type="text" class="form-control form-control-sm" placeholder="What is your name" formControlName="label" />
+                </div>
+
+                <div class="form-group my-2">
+                    <label>Name</label>
+                    <input type="text" class="form-control form-control-sm" placeholder="name" formControlName="name" />
+                </div>
+
+                <div class="form-group my-2">
+                    <label>Type</label>
+                    <!--<input type="text" class="form-control form-control-sm" formControlName="type" />-->
+                    <select class="form-control form-control-sm" formControlName="type">
+                        <option value="text">Text</option>
+                        <option value="textarea">Textarea</option>
+                        <option value="yes_no">Yes / No</option>
+                        <option value="checkbox">Checkbox</option>
+                    </select>
+                </div>
+
+                <div class="form-group my-2">
+                    <mat-checkbox formControlName="required">Required field
+                    </mat-checkbox>
+                </div>
+
+                <button class="btn btn-success mt-2 pointer" type="submit">
+                    <ng-container *ngIf="data">
+                        Update element
+                    </ng-container>
+                    <ng-container *ngIf="!data">
+                        Add element
+                    </ng-container>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</form>

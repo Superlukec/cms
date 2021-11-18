@@ -1,0 +1,20 @@
+<ng-container *ngIf="!page">
+    <app-view-shareables></app-view-shareables>
+</ng-container>
+
+<ng-container *ngIf="page">
+    <ng-container *ngIf="page == 'new'">
+        <!--<app-upload-file></app-upload-file>-->
+        <app-new-shareable></app-new-shareable>
+    </ng-container>
+    <ng-container *ngIf="page != 'new'">        
+        <ng-container *ngIf="page != 'users'">
+            <app-new-shareable [id]="shareableId"></app-new-shareable>
+        </ng-container>
+        <ng-container *ngIf="page == 'users'">
+            <!--<app-new-user [role]="4"></app-new-user>-->
+            <app-show-shareable-users></app-show-shareable-users>
+        </ng-container>
+
+    </ng-container>
+</ng-container>

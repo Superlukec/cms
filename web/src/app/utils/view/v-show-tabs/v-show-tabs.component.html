@@ -1,0 +1,49 @@
+<ng-container *ngIf="tabsData">
+    <ng-container *ngIf="loading">
+        <div class="p-4">
+
+            <div class="card-loader card-loader--tabs"></div>
+
+            <div class="card-loader card-loader--tabs"></div>
+
+            <div class="card-loader card-loader--tabs"></div>
+
+            <div class="card-loader card-loader--tabs"></div>
+
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!loading">
+
+        <div class="row show-tabs">
+
+            <div class="col-12" [ngClass]="{ 'col-md-4' : tabOptions.vertical }">
+
+                <ul class="nav nav-pills"
+                    [ngClass]="{ 'flex-column' : tabOptions.vertical, 'nav-fill' : !tabOptions.vertical }">
+
+                    <li *ngFor="let tab of tabsData; let i = index;" class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active' : tab.selected }" href="javascript:void(0)"
+                            (click)="showContent(i)">{{ tab.title }}</a>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="col-12" [ngClass]="{ 'col-md-8' : tabOptions.vertical }"
+                [ngStyle]="{ maxHeight: maxHeight, overflowY: 'auto' }">
+                
+                <ng-container *ngIf="(tabType == '' || tabType == 'text')">
+                    <div class="p-2" [generateHTML]="shownText"></div>
+                </ng-container>
+
+                <ng-container *ngIf="tabType == 'products'">
+                    <div [ngClass]="{ 'my-4' : !tabOptions.vertical }">
+                        <app-v-show-products [limit]="limitProduct" [excerpt]="showExcerpt" [columns]="columns" [brands]="showProducts"></app-v-show-products>
+                    </div>
+                </ng-container>
+            </div>
+
+        </div>
+
+    </ng-container>
+</ng-container>

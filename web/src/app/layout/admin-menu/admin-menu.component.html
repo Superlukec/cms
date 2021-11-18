@@ -1,0 +1,413 @@
+<ng-container *ngIf="sidebarShow">
+    <div class="admin-menu h-100 overflow-y d-flex flex-column">
+
+        <ng-container *ngIf="layoutSize < 2">
+            <div class="text-right mt-1 mr-3" (click)="hideSidebar()" style="min-width: 40px; font-size: 1.4rem;"><i class="fas fa-bars pointer"></i></div>
+        </ng-container>
+                
+        
+        <ng-container *ngxPermissionsExcept="['EXCHANGE']">
+
+            <div class="d-flex align-items-center avatar-container">
+                <!--<div class="avatar ml-3 border border-secondary">
+                    <i class="fas fa-user"></i>
+                </div>-->
+                <div class="ml-3 mr-2">
+                    <app-user-avatar [info]="user"></app-user-avatar>
+                </div>
+                <div>
+                    <div class="name text-truncate" title="{{ user.full_name }}">
+                        {{ user.full_name }}
+                    </div>
+                    <a routerLink="/admin/account-settings" class="text-secondary" style="font-size: .7rem;">Edit profile</a>
+                </div>
+
+            </div>
+
+
+        </ng-container>
+
+        <ng-container *ngIf="managementMenu">
+            <ng-container *ngxPermissionsOnly="['SUPER_ADMIN']">
+                <ul class="list-unstyled">
+                    <li>
+                        <a routerLink="/management/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <div class="d-flex">
+                                <div class="text-center pr-4" style="width: 28px;">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                Sites
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="!managementMenu">
+
+            <ul class="list-unstyled main-admin-list">
+                <li *ngxPermissionsExcept="['EXCHANGE']">
+                    <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            Dashboard
+                        </div>
+                    </a>
+                </li>
+                <li *ngxPermissionsExcept="['EXCHANGE']">
+                    <a routerLink="/admin/pages" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-file"></i>
+                            </div>
+                            Pages
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/pages" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">View all</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/pages/new" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">New page</a>
+                        </li>                        
+                        <li>
+                            <a routerLink="/admin/pages/trash" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Trash</a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngxPermissionsExcept="['EXCHANGE']">
+                    <a routerLink="/admin/posts" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="far fa-newspaper"></i>
+                            </div>
+                            News
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/posts" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">View all</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/posts/new" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">New post</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/posts/categories" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Categories</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/posts/trash" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Trash</a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngxPermissionsExcept="['EXCHANGE']">
+                    <a routerLink="/admin/products" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            Products
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/products" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">View all</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/products/new" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">New product</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/products/brands" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Brands</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/products/properties" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Properties</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/products/settings" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Settings</a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN']">
+                    <a routerLink="/admin/users" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            Users
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/users" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">View all</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/users/new" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">New user</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN', 'EDITOR']">
+                    <a routerLink="/admin/templates" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="far fa-lightbulb"></i>
+                            </div>
+                            Templates
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/templates" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Templates</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/templates/new" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">New template</a>
+                        </li>                       
+                    </ul>
+                </li>
+
+                <li *ngxPermissionsExcept="['EXCHANGE']">
+                    <a routerLink="/admin/chat" routerLinkActive="active">
+                        <div class="d-flex" [ngClass]="{ '_notify-user' :  (chatbotMessages > 0) }">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="far fa-comment-dots"></i>
+                            </div>
+                            <div>Chatbot</div>
+                            <div class="ml-2" style="margin-top: -3px;" *ngIf="chatbotMessages > 0">
+                                <span class="badge badge-danger">{{ chatbotMessages }}</span>
+                            </div>
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/chat" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Chatting</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/chat/settings" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Settings</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- @TODO - aktiviranje modulov
+                <li *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN']">
+                    <a href="#">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-plug"></i>
+                            </div>
+                            Modules
+                        </div>
+                    </a>
+                </li>-->
+                <li *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN', 'EDITOR']">
+                    <a routerLink="/admin/forms" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="far fa-envelope"></i>
+                            </div>
+                            Forms
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/forms" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">View all</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/forms/new" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">New form</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/forms/submissions" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Submissions</a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN', 'EDITOR']">
+                    <a routerLink="/admin/shareables" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-share-alt"></i>
+                            </div>
+                            Shareables
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/shareables" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Repository</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/shareables/new" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Create new</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/shareables/users" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Users</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a routerLink="/admin/transfer" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            Transfer
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/transfer" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Files</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/transfer/new" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Add new</a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngxPermissionsExcept="['EXCHANGE']">
+                    <a routerLink="/admin/assets" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-toolbox"></i>
+                            </div>
+                            Web Assets
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/assets" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Repository</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/assets/new" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Create new</a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN']">
+                    <a routerLink="/admin/appearance" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            Appearance
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/appearance" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Theme</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/appearance/menu" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Menus</a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN']">
+                    <a routerLink="/admin/google-maps" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-globe-europe"></i>
+                            </div>
+                            Google Maps
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/google-maps" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Settings</a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN']">
+                    <a routerLink="/admin/google-analytics" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            Google Analytics
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/google-analytics" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Settings</a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN']">
+                    <a routerLink="/admin/settings" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            Site Settings
+                        </div>
+                    </a>
+                    <ul class="list-unstyled submenu">
+                        <li>
+                            <a routerLink="/admin/settings" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Settings</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/settings/images" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Images</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/settings/cookie" routerLinkActive="sub-active" [routerLinkActiveOptions]="{exact: true}">Cookie settings</a>
+                        </li>
+                        <!--
+                        <li>
+                            <a routerLink="/admin/settings/cookie" routerLinkActive="sub-active"
+                                [routerLinkActiveOptions]="{exact: true}">Export / Import</a>
+                        </li>
+                        <li>
+                            <a routerLink="/admin/settings/cookie" routerLinkActive="sub-active"
+                                [routerLinkActiveOptions]="{exact: true}">System backups</a>
+                        </li>-->
+
+                        <!--
+                        <li>
+                            <a routerLink="/admin/settings/translations" routerLinkActive="sub-active"
+                                [routerLinkActiveOptions]="{exact: true}">Translations</a>
+                        </li>-->
+                    </ul>
+                </li>
+                <li *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN']">
+                    <a routerLink="/admin/logs" routerLinkActive="active">
+                        <div class="d-flex">
+                            <div class="text-center pr-4" style="width: 28px;">
+                                <i class="fas fa-archive"></i>
+                            </div>
+                            Server logs
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </ng-container>
+
+        <div class="header-title m-2 mt-auto" style="font-size: 1.1em;">
+            <div class="d-flex flex-column text-center">
+
+                <div class="header-text">
+                    <ng-container *ngIf="!isMultisite">
+                        <div class="text-truncate" title="{{ siteTitle }}">{{ siteTitle }}</div>
+                    </ng-container>
+                    <ng-container *ngIf="isMultisite">
+
+                        <ng-container *ngxPermissionsOnly="['SUPER_ADMIN']">
+                            <ng-container *ngIf="managementMenu">
+                                <a class="text-truncate btn btn-outline-secondary btn-sm text-white" title="{{ siteTitle }}" routerLink="/admin">{{ siteTitle }}</a>
+                            </ng-container>
+
+                            <ng-container *ngIf="!managementMenu">
+                                <a class="text-truncate btn btn-outline-secondary btn-sm text-white" title="{{ siteTitle }}" routerLink="/management/home">{{ siteTitle }}</a>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngxPermissionsExcept="['SUPER_ADMIN']">
+                            <div class="text-truncate" title="{{ siteTitle }}">{{ siteTitle }}</div>
+                        </ng-container>                    
+                    </ng-container>
+                </div>
+
+                <div class="version-number mt-2">
+                    v{{ version }}
+                </div>
+
+                
+            </div>
+
+        </div>
+
+
+    </div>
+</ng-container>

@@ -1,0 +1,75 @@
+<ng-container *ngIf="posts.length == 0">
+    <div class="my-2">V tej kategoriji še ni novic.</div>
+</ng-container>
+<ng-container *ngIf="posts.length > 0">
+    <ng-container *ngIf="layout == 'columns'">
+
+        <div class="row mb-3">
+            <div class="col-6 col-md-4 news-container-cols mb-5" *ngFor="let p of posts">
+
+
+                <ng-container *ngIf="!p.featured_image">
+                    <div [ngStyle]="{ width: '100%', height: '150px', background: '#fff' }"
+                        class="inner-container bg-white mr-3 d-flex justify-content-center align-items-center">
+                        <i class="fas fa-camera text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="p.featured_image">
+
+                    <div [ngStyle]="{background: 'url(' + _imageService.getImageSrc('medium', p.featured_image) + ')', width: '100%', height: '150px', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center center' }"
+                        class="inner-container bg-white mr-3"></div>
+
+                </ng-container>
+
+           
+                   
+                <div class="media-body mt-4">
+                    <h5 class="mt-0">{{ p.title }}</h5>
+                    <p style="font-size: .9rem;">{{ p.meta_description }}</p>
+                    <a routerLink="/{{ p.slug }}" class="stretched-link">Preberite več</a>
+                </div>
+             
+
+            </div>
+
+        </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="layout == 'rows'">
+
+
+        <div class="row mb-5" *ngFor="let p of posts">
+
+            <div class="col-12 col-md-10  news-container-rows">
+
+                <div class="media position-relative">
+                    <ng-container *ngIf="!p.featured_image">
+                        <div [ngStyle]="{ width: '300px', height: '150px', background: '#fff' }"
+                            class="inner-container bg-white mr-3 d-flex justify-content-center align-items-center">
+                            <i class="fas fa-camera text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="p.featured_image">
+
+                        <div [ngStyle]="{background: 'url(' + _imageService.getImageSrc('medium', p.featured_image) + ')', width: '300px', height: '150px', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center center' }"
+                            class="inner-container bg-white mr-3"></div>
+
+                    </ng-container>
+
+                    <div class="media-body">
+                        <h5 class="mt-0">{{ p.title }}</h5>
+                        <p style="font-size: .9rem;">{{ p.meta_description }}</p>
+                        <a routerLink="/{{ p.slug }}" class="stretched-link">Preberite več</a>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </ng-container>
+
+</ng-container>

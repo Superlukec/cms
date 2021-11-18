@@ -1,0 +1,10 @@
+<div class="row" *ngIf="!loading">
+    <div class="col-3" *ngFor="let icon of icons">
+        <div class="d-flex align-items-center my-2 icon-holder" [ngClass]="{ 'selected-icon' : (selectedIcon == icon) }" (click)="selectIcon(icon)">
+            <div class="icon">
+                <i class="{{ icon }}" ></i>
+            </div>
+            <input type="radio" name="icon" value="{{ icon }}" [(ngModel)]="selectedIcon" [ngModelOptions]="{standalone: true}" />            
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+<ng-container *ngIf="options">
+    <div class="{{ options.box_class }} {{ options.margin }} {{ options.padding }}">
+        <div class="btn {{ options.button_style }} {{ options.button_size }}" [ngClass]="{ 'btn-block': options.button_fullwidth }" (click)="action()">
+            
+            <ng-container *ngIf="options.button_icon">
+                <i class="{{ options.button_icon }}"></i>
+             </ng-container>
+
+            {{ options.button_text }}
+        </div>
+    </div>
+</ng-container>

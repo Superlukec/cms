@@ -1,0 +1,5 @@
+<app-show-login *ngIf="!page"></app-show-login>
+<ng-container *ngIf="(page == 'forgot')">
+  <app-forgot-password *ngIf="(!requestId)"></app-forgot-password>
+  <app-reset-password *ngIf="(requestId)" [id]="requestId"></app-reset-password>
+</ng-container>

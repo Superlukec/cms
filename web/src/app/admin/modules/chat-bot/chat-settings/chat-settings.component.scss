@@ -1,0 +1,106 @@
+._chat-settings {
+    display: flex!important;
+
+    ._general-settings {
+        width: 25%!important;
+    }
+
+}
+
+._my-w-50 {
+    width: 50%;
+}
+
+
+@media (max-width: 575px) {  
+   
+    ._chat-settings {
+        flex-direction: row!important;        
+        flex-wrap: wrap;
+
+        ._general-settings {
+            width: 100%!important;
+        }
+    
+    }
+
+    ._my-w-50 {
+        width: 100%;
+    }
+}
+
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {  
+
+    ._chat-settings {
+        flex-direction: row!important;
+        flex-wrap: wrap;
+
+        ._general-settings {
+            width: 100%!important;
+        }
+    }
+
+    ._my-w-50 {
+        width: 100%;
+    }
+}
+ 
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {  
+    ._chat-settings {
+        flex-direction: initial;
+
+        ._general-settings {
+            width: 50%!important;
+        }
+    }
+
+    ._my-w-50 {
+        width: 100%;
+    }
+}
+
+ 
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { 
+    ._chat-settings {
+        flex-direction: initial;
+
+        ._general-settings {
+            width: 25%!important;
+        }
+    }
+
+    ._my-w-50 {
+        width: 50%;
+    }
+
+    
+}
+ 
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {  
+    ._chat-settings {
+        flex-direction: initial;
+    }
+}
+
+
+
+// chatbox - demo
+
+._chatbot-container { 
+    height: 300px;
+}
+
+._chatbot {
+    background: #fff;
+    width: 250px;        
+}
+
+._chatbox_messages {
+    overflow-y: auto;
+    font-size: .9rem;
+}

@@ -1,0 +1,147 @@
+<ng-container *ngIf="!loading">
+
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate class="h-100 d-flex flex-column">
+
+        <div  *ngIf="!dialog" class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-4">
+
+
+            <div class="d-flex text-muted">
+            </div>
+
+            <div>
+                <button class="btn btn-primary ml-2" type="submit">Save</button>
+            </div>
+
+
+        </div>
+
+        <div class="d-flex align-items-stretch flex-grow-1 overflow-y">
+            <div class="w-100 h-100 overflow-y">
+
+                <div class="container" [ngClass]="{ 'mb-5' : (!dialog) }">
+
+                    <h4 [ngClass]="{ 'mt-4' : (!dialog) }">
+                        <ng-container *ngIf="!id">Add new user</ng-container>
+                        <ng-container *ngIf="id">Edit user</ng-container>
+                    </h4>
+
+                    <div class="row my-4" *ngIf="!id">
+                        <div class="col-12 col-md-6">
+                            <label>
+                                Type
+                                <div class="text-muted" style="font-size: 0.8em;">Invite or add user</div>
+                            </label>
+                            <select class="form-control" [(ngModel)]="registrationType" [ngModelOptions]="{standalone: true}" (change)="onChangeRegType($event.target.value)">
+                                <option value="add">Add user</option>
+                                <option value="invite">Send invitation</option>                                    
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" *ngIf="(registrationType == 'invite') && !id">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Append message <span class="text-muted" style="font-size: 0.8em;">(optional)</span></label>
+                                <textarea type="text" class="form-control input-lg"
+                                    formControlName="message"></textarea>
+
+                                <div *ngIf="submitted && f.message.errors" class="invalid-feedback">
+                                    <div *ngIf="f.message.errors.required">Required field</div>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+
+                    <div class="row  my-4">                        
+                        <div class="col-12 col-md-6">
+
+                            <div class="form-group">
+                                <label>
+                                    E-mail
+                                </label>
+                                <input type="text" class="form-control input-lg" placeholder="E-mail"
+                                    formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                                
+                                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                    <div *ngIf="f.email.errors.required">Required field</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6" *ngIf="registrationType == 'add'">
+
+                            <div class="form-group">
+                                <label>Password (min. length 6 characters)</label>
+                                <!--<input type="password" class="form-control input-lg" placeholder="" formControlName="password" />-->
+                                <app-password [inputClass]="(submitted && f.password.errors) ? 'is-invalid' : ''" (change)="onPasswordChange($event)"></app-password>
+
+                                <div *ngIf="submitted && f.password.errors" style="margin-top: 2px; font-size: 80%; color: #dc3545;">
+                                    <div *ngIf="f.password.errors.required">Required field</div>
+                                    <div *ngIf="f.password.errors.minlength">Field must be at least 6 char. long</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row  my-4">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>First name</label>
+                                <input type="text" class="form-control input-lg" placeholder="First name"
+                                    formControlName="first_name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }" />
+
+                                <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.first_name.errors.required">Required field</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Last name</label>
+                                <input type="text" class="form-control input-lg" placeholder="Last name"
+                                    formControlName="last_name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }" />
+
+                                <div *ngIf="submitted && f.last_name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.last_name.errors.required">Required field</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Company <span class="text-muted" style="font-size: 0.8em;">(optional)</span></label>
+                                <input type="text" class="form-control input-lg"
+                                    formControlName="company" [ngClass]="{ 'is-invalid': submitted && f.company.errors }" />
+
+                                <div *ngIf="submitted && f.company.errors" class="invalid-feedback">
+                                    <div *ngIf="f.company.errors.required">Required field</div>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                    
+
+                    <div class="d-flex my-4" *ngIf="!role">
+                        <div class="form-group">
+                            <label>
+                                Role
+                                <div class="text-muted" style="font-size: 0.8em;">Select role</div>
+                            </label>
+                            <app-user-role [role]="f.role.value" (change)="onRoleChange($event)"></app-user-role>
+                        </div>
+                    </div>
+
+
+                    <div *ngIf="dialog" class="mt-4">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+</ng-container>

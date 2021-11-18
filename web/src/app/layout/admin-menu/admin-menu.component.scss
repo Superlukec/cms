@@ -1,0 +1,18 @@
+._notify-user {
+    border-left: 4px solid red; 
+    padding-left: 5px;
+    animation: anime 2s infinite;
+}
+
+
+@keyframes anime {
+    0% {
+        border-left: 4px solid red; 
+    }
+    50% {
+        border-left: 4px solid rgba($color: red, $alpha: .2); 
+    }
+    100% {
+        border-left: 4px solid red; 
+    }
+}

@@ -1,0 +1,690 @@
+<ng-container *ngIf="!loading">
+
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate class="h-100 d-flex flex-column">
+
+        <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between">
+
+
+            <ng-container *ngIf="!isDeleted">
+                
+
+                <div class="ml-auto d-flex align-items-center">
+                    <div class="btn btn-outline-danger btn" *ngIf="id" (click)="deletePage()">
+                        <i class="far fa-trash-alt"></i>
+                    </div>
+
+                    <ng-container *ngIf="!componentsLoading">
+                        <button type="button" class="btn btn-outline-secondary ml-3 ml-md-5" *ngIf="id"
+                            (click)="copyToNewDesign()">
+                            <i class="far fa-copy"></i>&nbsp; Clone
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="componentsLoading">
+                        <button type="button" *ngIf="id"
+                            class="btn btn-outline-secondary ml-3 ml-md-5 disabled ml-2 d-flex align-items-center">
+                            <div class="spinner-border text-secondary mr-2" style="width: 1rem; height: 1rem;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div> Clone
+                        </button>
+                    </ng-container>
+
+                    <a target="_blank" routerLink="/{{f.slug.value}}" class="btn btn-outline-success ml-2" *ngIf="id">
+                        <i class="fas fa-eye"></i>&nbsp; Preview                   
+                    </a>
+
+                    <ng-container *ngIf="!componentsLoading">
+                        <button class="btn btn-primary ml-2" type="submit"><i class="fas fa-save"></i>&nbsp; Save</button>
+                    </ng-container>
+                    <ng-container *ngIf="componentsLoading">
+                        <button class="btn btn-primary disabled ml-2 d-flex align-items-center" type="button">
+                            <div class="spinner-border text-light mr-2" style="width: 1rem; height: 1rem;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div> Save
+                        </button>
+                    </ng-container>
+
+
+                    <ng-container *ngIf="layoutSize < 2">
+                        <div class="btn btn-outline-info ml-2" (click)="showSidebar(!showOptionSidebar)">
+                            <i class="fas fa-bars"></i>
+                        </div>
+                    </ng-container>
+
+                </div>
+            </ng-container>
+            <ng-container *ngIf="isDeleted">
+
+                <div class="ml-auto d-flex align-items-center">
+                    <div class="btn btn-outline-danger btn" *ngIf="id" (click)="deletePagePerm()">
+                        <i class="far fa-trash-alt"></i>&nbsp; Delete perm.
+                    </div>
+
+                    <button type="button" class="btn btn-outline-secondary ml-3 ml-md-5" *ngIf="id"
+                        (click)="copyToNewDesign()">
+                        <i class="fas fa-history"></i>&nbsp; Restore
+                    </button>
+                </div>
+
+            </ng-container>
+
+        </div>
+
+        <div class="d-flex align-items-stretch flex-grow-1 overflow-y">
+            <div class="col h-100 overflow-y">
+
+                <div class="container h-100">
+                    
+                    <div class="row h-100" (click)="selectComponent(false)">
+                        <div class="col-12">
+
+
+
+                            <div class="form-group mt-4">
+                                <input type="text" class="form-control" placeholder="Add title"
+                                    formControlName="title" />
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <div>https://{{ hostname }}/</div>
+                                <input type="text" class="ml-2 form-control w-25" formControlName="slug" />
+                                <ng-container *ngIf="isPage && id">
+                                    <mat-checkbox formControlName="homepage" class="ml-4 mt-2"
+                                        (change)="homePageButton()">Home page
+                                    </mat-checkbox>
+                                </ng-container>
+                            </div>
+
+                            <div class="my-2 d-flex align-items-center">
+                                <mat-checkbox formControlName="redirect" class="mt-2 font-italic">Redirect
+                                </mat-checkbox>
+
+                            
+
+                                <div class="ml-3" *ngIf="f.redirect.value">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Enter URL"
+                                        formControlName="redirect_url" />
+                                </div>
+                            </div>
+
+                            <div class="card mt-5">
+
+                                <div class="card-body" cdkDropList (cdkDropListDropped)="drop($event)">
+
+                                    <ng-container *ngIf="elements.length == 0">
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <button type="button" class="btn btn-outline-primary btn-circle add-components btn-sm"
+                                            (click)="addComponent(0)"><i class="fa fa-plus"></i></button>
+
+                                            <div class="p-2 border rounded popup-element-box" style="z-index: 9999!important"
+                                                [ngClass]="{ 'd-block' : showElementBox[0] }" (mouseleave)="addComponent()">
+                                                <div class="border-top border-left popup-element-arrow"></div>
+
+                                                <div class="row text-center editor-components p-3">
+                                                    
+
+                                                    <div class="col-4" *ngFor="let o of componentsOptions">
+                                                        <div class="element" (click)="addElement(0, o.action)">
+                                                            <i class="{{ o.icon }}"></i>
+                                                            <div>{{ o.name }}</div>
+                                                        </div>
+                                                    </div>
+                                                
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <div *ngFor="let elem of elements;trackBy: trackByFn; let i = index;" cdkDrag>
+                                        
+                                        <div class="p-2 border border-dashed my-3 component"
+                                            [ngClass]="{ 'component-selected-border' : (elem.selected) }"
+                                            (click)="selectComponent(elem._id, elem.type)"
+                                            (mouseenter)="showRemoveButton(elem, true)"
+                                            (mouseleave)="showRemoveButton(elem, false)">
+
+                                            <div class="label-component-position border">
+                                                {{ elem.type | uppercase }}
+                                            </div>
+
+                                            <div class="remove-component-position"
+                                                [ngClass]="{ 'd-block' : elem.showDelete }">
+
+                                                <ng-container *ngIf="elem.type == 'columns'">
+                                                    <button type="button"
+                                                        class="btn btn-outline-success btn-circle remove-component btn-sm mr-2" (click)="changeColumnLayout(elem)"><i class="fas fa-columns"
+                                                            style="margin-top: -1px;margin-left: -2px;"></i></button>
+                                                </ng-container>
+
+                                                <button type="button"
+                                                    class="btn btn-outline-primary btn-circle remove-component btn-sm mr-2"
+                                                    cdkDragHandle><i class="fas fa-arrows-alt"
+                                                        style="margin-top: -1px;margin-left: -2px;"></i></button>
+
+                                                <button type="button"
+                                                    class="btn btn-outline-danger btn-circle remove-component btn-sm"
+                                                    (click)="removeComponent(elem)"><i class="fas fa-times"
+                                                        style="margin-top: -1px;margin-left: -1px;"></i></button>
+
+                                            </div>
+
+                                            <div id="cont-{{ elem._id }}">
+                                                <div *ngIf="elem.type == 'paragraph'">
+                                                    <app-ckeditor
+                                                        [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'fontColor', 'alignment', '|', 'bulletedList', 'numberedList', '|', 'insertTable','mediaEmbed', '|', 'undo', 'redo' ] }"
+                                                        [data]="elem.value"
+                                                        (output)="onCkEditorValue(elem._id, $event)"></app-ckeditor>
+                                                </div>
+                                                <div *ngIf="elem.type == 'columns'">
+                                                    <app-columns [id]="elem._id" [showColumns]="elem.showColumns" (data)="onColumnsBlockData($event)"
+                                                        (clicked)="onColumnClick(elem._id, $event)"
+                                                        [blocks]="elem.blocks" [lang]="selectedLang">
+                                                    </app-columns>
+                                                </div>
+                                                <div *ngIf="elem.type == 'space'" style="height: 50px">
+                                                </div>
+                                                <div *ngIf="elem.type == 'image'">
+                                                    <app-upload-image (data)="onImageUpload(elem._id, $event)"
+                                                        (delete)="onDelete(elem._id)" [img]="elem.value">
+                                                    </app-upload-image>
+                                                </div>
+                                                <div *ngIf="elem.type == 'html'">
+                                                    <app-insert-html (output)="onHTMLData(elem._id, $event)"
+                                                        [data]="elem.value"></app-insert-html>
+                                                </div>
+                                                <div *ngIf="elem.type == 'news'">
+                                                    <app-insert-news (output)="onNewsData(elem._id, $event)" [lang]="selectedLang" [data]="elem">
+                                                    </app-insert-news>
+                                                </div>
+                                                <div *ngIf="elem.type == 'products'">
+                                                    <app-insert-products
+                                                        (output)="onProductShowSelect(elem._id, $event)"
+                                                        (options)="onProductOptions(elem._id, $event)" [data]="elem"
+                                                        [lang]="selectedLang"></app-insert-products>
+                                                </div>
+                                                <div *ngIf="elem.type == 'hero'">
+                                                    <app-insert-hero (output)="onHeroData(elem._id, $event)"
+                                                        [data]="elem"></app-insert-hero>
+                                                </div>
+                                                <div *ngIf="elem.type == 'google-maps'">
+                                                    <app-google-maps-comp (output)="onGoogleMapsData(elem._id, $event)"
+                                                        [data]="elem"></app-google-maps-comp>
+                                                </div>
+                                                <div *ngIf="elem.type == 'form'">
+                                                    <app-show-form [lang]="selectedLang"
+                                                        (output)="onFormData(elem._id, $event)" [data]="elem">
+                                                    </app-show-form>
+                                                </div>
+                                                <div *ngIf="elem.type == 'gallery'">
+                                                    <app-add-gallery (output)="onGallerysData(elem._id, $event)"
+                                                        [data]="elem"></app-add-gallery>
+                                                </div>
+                                                <div *ngIf="elem.type == 'button'">
+                                                    <app-add-button (output)="onButtonData(elem._id, $event)"
+                                                        [data]="elem"></app-add-button>
+                                                </div>
+                                                <div *ngIf="elem.type == 'tabs'">
+                                                    <app-add-tabs (output)="onTabsData(elem._id, $event)"
+                                                    [data]="elem"></app-add-tabs>
+                                                </div>
+                                                <div *ngIf="elem.type == 'template'">
+                                                    <app-add-template (output)="onTemplateData(elem._id, $event)"
+                                                    [data]="elem"></app-add-template>                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-center">                                            
+                                            <button type="button" class="btn btn-outline-primary btn-circle add-components btn-sm"
+                                            (click)="addComponent(i)"><i class="fa fa-plus"></i></button>
+
+                                            <div class="p-2 border rounded popup-element-box" style="z-index: 9999!important"
+                                                [ngClass]="{ 'd-block' : showElementBox[i] }" (mouseleave)="addComponent()">
+                                                <div class="border-top border-left popup-element-arrow"></div>
+
+                                                <div class="row text-center editor-components p-3">
+                                                    
+
+                                                    <div class="col-4" *ngFor="let o of componentsOptions">
+                                                        <div class="element" (click)="addElement(i, o.action)">
+                                                            <i class="{{ o.icon }}"></i>
+                                                            <div>{{ o.name }}</div>
+                                                        </div>
+                                                    </div>
+                                                
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- .col-12 -->
+
+                    </div>
+                    <!-- .row -->
+                   
+
+                </div>
+                <!-- .container -->
+
+            </div>
+            <div class="sidebar-option p-3 overflow-y" *ngIf="showOptionSidebar">
+
+                <!--tukaj: {{ sidebarOption }}
+                isColumn: {{ isColumn }}-->
+
+                <ng-container *ngIf="!sidebarOption">
+                    <!-- page options (not component) -->
+
+                    <div class="mb-3">
+                        <div class="sys-label">Post visibility</div>
+                        
+                        <div class="mt-2">
+                            <mat-checkbox formControlName="private_page">
+                                Hide from public                                
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3" *ngIf="multilanguage">
+                        <div class="sys-label">Choose language</div>
+
+                        <div class="py-2">
+                            <div class="d-flex w-50">
+                                <select class="form-control form-control-sm" [(ngModel)]="selectedLang"
+                                    [ngModelOptions]="{standalone: true}" (change)="onChangeLang($event.target.value)">
+                                    <option *ngFor="let lang of availableLanguages" value="{{ lang.prefix }}">
+                                        {{ lang.language }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="sys-label mt-2">Meta tags (SEO)</div>
+                        <div class="py-2">
+                            <small>Keywords</small>
+                            <input type="text" formControlName="meta_keywords" class="form-control form-control-sm" placeholder="key, key, key" />
+                        </div>
+
+                        <div class="py-2">
+                            <small>Description</small>
+                            <textarea formControlName="meta_description" class="form-control form-control-sm" placeholder="Meta description"></textarea>
+                        </div>
+
+
+                        <div class="sys-label mt-2">Backups</div>
+                        <div class="py-2">
+
+                            <select class="form-control-sm form-control"  [(ngModel)]="backupVersion" [ngModelOptions]="{standalone: true}">
+                                <option *ngFor="let b of backups; let i = index;" value="{{ i }}">v{{ b.version }}</option>
+                                <option value="11">Current version</option>
+                            </select>
+
+                            <div class="my-2">
+                                <div class="btn btn-sm btn-outline-danger" [ngClass]="{ disabled: backupVersion == 11 }" (click)="revertBackup(backupVersion)">Revert</div>
+                                <div class="btn btn-sm btn-outline-primary ml-2" [ngClass]="{ disabled: backupVersion == 11 }" (click)="previewBackup(backupVersion)">Preview</div>
+                            </div>
+                        </div>
+                    </div>
+
+                        
+                    <div class="sys-label mt-2">Featured image</div>
+                    <div class="pb-2">
+                        <app-upload-image (data)="onFeaturedImageUpload($event)" (delete)="onFeaturedImageDelete($event)" [small]="true" [img]="featuredImage"></app-upload-image>
+                    </div>
+                    
+
+
+
+                </ng-container>
+               
+                <div class="mb-3">
+
+                    <div class="sys-label">Layout</div>
+
+                    <ng-container *ngIf="sidebarOption && sidebarOption == 'space'">
+                        <small>Space height (eg. 50px)</small>
+                            <input type="text" class="form-control form-control-sm" [(ngModel)]="optionData.space_height"
+                                [ngModelOptions]="{standalone: true}" placeholder="50px"
+                                (change)="optionPageValue(optionData.space_height, 'space_height')" />
+                    </ng-container>
+
+                    <!--<ng-container *ngIf="sidebarOption && (sidebarOption != 'space' && sidebarOption != 'tabs' && sidebarOption != 'gallery')">-->
+                    <ng-container *ngIf="sidebarOption && (sidebarOption != 'space')">
+                        <div class="my-2" *ngIf="!isColumn">
+                            <small>Width</small>
+                            <div class="d-flex w-50">
+                                <select class="form-control form-control-sm mb-0" [(ngModel)]="optionData.layout"
+                                    [ngModelOptions]="{standalone: true}"
+                                    (change)="optionPageValue(optionData.layout, 'layout')">
+                                    <option value="normal">Normal</option>
+                                    <option value="full-width">Full width</option>
+                                    <option value="container-narrow">Narrow</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <small>Class</small>
+                            <input type="text" placeholder="class1 class2" class="form-control form-control-sm"
+                                [(ngModel)]="optionData.layout_class" [ngModelOptions]="{standalone: true}"
+                                (change)="optionPageValue(optionData.layout_class, 'layout_class')" />
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="isColumn">
+                        <div class="my-2">
+                            <small>Column width</small>
+                            <select class="form-control form-control-sm" [(ngModel)]="optionData.column_width" (change)="optionPageValue(optionData.column_width, 'column_width')"
+                            [ngModelOptions]="{standalone: true}">
+                                <option value="">auto</option>
+                                <option value="col-md-1">1/12</option>
+                                <option value="col-md-2">2/12</option>
+                                <option value="col-md-3">3/12</option>
+                                <option value="col-md-4">4/12</option>
+                                <option value="col-md-5">5/12</option>
+                                <option value="col-md-6">6/12</option>
+                                <option value="col-md-7">7/12</option>
+                                <option value="col-md-8">8/12</option>
+                                <option value="col-md-9">9/12</option>
+                                <option value="col-md-10">10/12</option>
+                                <option value="col-md-11">11/12</option>
+                                <option value="col-md-12">12/12</option>
+                            </select>
+                        </div>
+                    </ng-container>
+
+                </div>
+
+
+                <ng-container *ngIf="sidebarOption">                    
+                   
+                    <ng-container *ngIf="sidebarOption == 'tabs'">
+
+                        <div class="sys-label">Tabs</div>
+                        
+                        <div class="my-2">
+
+                            <small>Tab menu</small>
+
+                            <select class="form-control form-control-sm"
+                                [(ngModel)]="optionData.tabs.vertical" [ngModelOptions]="{standalone: true}"
+                                (change)="optionPageValue(optionData.tabs.vertical, 'vertical')">
+                                <option value="true">Vertical</option>
+                                <option value="false">Horizontal</option>
+                            </select>
+
+                        </div>
+
+                        <div class="my-2">
+
+                            <small>Max. height (px)</small>
+                            <input type="text" placeholder="150px" class="form-control form-control-sm"
+                                [(ngModel)]="optionData.tabs.max_height" [ngModelOptions]="{standalone: true}"
+                                (change)="optionPageValue(optionData.tabs.max_height, 'max_height')" />
+
+                        </div>
+
+                    </ng-container>
+
+                </ng-container>
+
+
+                <div class="mb-3" *ngIf="sidebarOption">
+
+                    <div class="sys-label">Box</div>
+
+                    <div class="my-2">
+                        <small>Class</small>
+                        <input type="text" placeholder="class1 class2" class="form-control form-control-sm"
+                            [(ngModel)]="optionData.box_class" [ngModelOptions]="{standalone: true}"
+                            (change)="optionPageValue(optionData.box_class, 'box_class')" />
+                    </div>
+
+                    <div class="my-2">
+
+                        <small>Text align</small>
+                        <select class="form-control form-control-sm" [(ngModel)]="optionData.text_align" (change)="optionPageValue(optionData.text_align, 'text_align')"
+                        [ngModelOptions]="{standalone: true}">
+                            <option value="">Auto</option>
+                            <option value="text-center">Text center</option>
+                            <option value="text-right">Text right</option>
+                            
+                        </select>
+
+                    </div>
+
+
+                    <div class="my-2">
+
+                        <small>Margin</small>
+                        <select class="form-control form-control-sm" [(ngModel)]="optionData.margin" (change)="optionPageValue(optionData.margin, 'margin')"
+                        [ngModelOptions]="{standalone: true}">
+                            <option value="">0</option>
+                            <option value="m-1">m-1</option>
+                            <option value="m-2">m-2</option>
+                            <option value="m-3">m-3</option>
+                            <option value="m-4">m-4</option>
+                            <option value="m-5">m-5</option>
+                            <option value="my-1">my-1</option>
+                            <option value="my-2">my-2</option>
+                            <option value="my-3">my-3</option>
+                            <option value="my-4">my-4</option>
+                            <option value="my-5">my-5</option>
+                            <option value="mx-1">mx-1</option>
+                            <option value="mx-2">mx-2</option>
+                            <option value="mx-3">mx-3</option>
+                            <option value="mx-4">mx-4</option>
+                            <option value="mx-5">mx-5</option>
+                            <option value="mt-1">mt-1</option>
+                            <option value="mt-2">mt-2</option>
+                            <option value="mt-3">mt-3</option>
+                            <option value="mt-4">mt-4</option>
+                            <option value="mt-5">mt-5</option>
+                            <option value="mb-1">mb-1</option>
+                            <option value="mb-2">mb-2</option>
+                            <option value="mb-3">mb-3</option>
+                            <option value="mb-4">mb-4</option>
+                            <option value="mb-5">mb-5</option>
+                        </select>
+
+                    </div>
+
+                    <div class="my-2">
+
+                        <small>Padding</small>
+                        <select class="form-control form-control-sm" [(ngModel)]="optionData.padding" (change)="optionPageValue(optionData.padding, 'padding')"
+                        [ngModelOptions]="{standalone: true}">
+                            <option value="">0</option>
+                            <option value="p-1">p-1</option>
+                            <option value="p-2">p-2</option>
+                            <option value="p-3">p-3</option>
+                            <option value="p-4">p-4</option>
+                            <option value="p-5">p-5</option>
+                            <option value="py-1">py-1</option>
+                            <option value="py-2">py-2</option>
+                            <option value="py-3">py-3</option>
+                            <option value="py-4">py-4</option>
+                            <option value="py-5">py-5</option>
+                            <option value="px-1">px-1</option>
+                            <option value="px-2">px-2</option>
+                            <option value="px-3">px-3</option>
+                            <option value="px-4">px-4</option>
+                            <option value="px-5">px-5</option>
+                            <option value="pt-1">pt-1</option>
+                            <option value="pt-2">pt-2</option>
+                            <option value="pt-3">pt-3</option>
+                            <option value="pt-4">pt-4</option>
+                            <option value="pt-5">pt-5</option>
+                            <option value="pb-1">pb-1</option>
+                            <option value="pb-2">pb-2</option>
+                            <option value="pb-3">pb-3</option>
+                            <option value="pb-4">pb-4</option>
+                            <option value="pb-5">pb-5</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div *ngIf="!isPage">
+
+                    <div class="sys-label">News category</div>
+
+                    <div class="py-3">
+
+                        <div *ngIf="categories.length == 0">
+                            No categories. <a routerLink="../categories" class="text-sm">Add here</a>
+                        </div>
+                        <ng-container *ngIf="categories.length > 0">
+                            <mat-checkbox [checked]="category.checked" (change)="onChangeCat($event)"
+                                style="display: block;" *ngFor="let category of categories; let i = index;"
+                                [value]="category._id">
+                                <div style="display: block">{{ category.name }}</div>
+                            </mat-checkbox>
+                        </ng-container>
+
+                    </div>
+
+                </div>
+
+                <ng-container *ngIf="sidebarOption">
+                    
+                    <ng-container *ngIf="sidebarOption == 'image'">
+                        <div class="sys-label">Image</div>
+
+                        <div class="my-2">
+                            <small>Image size</small>
+                            <select class="form-control form-control-sm" [(ngModel)]="optionData.img_size"
+                            [ngModelOptions]="{standalone: true}" (change)="optionPageValue(optionData.img_size, 'img_size')">
+                                <option value="">Full size</option>
+                                <option value="thumbnail">Thumbnail</option>
+                                <option value="medium">Medium</option>
+                                <option value="large">Large</option>
+                            </select>
+              
+                        </div>
+
+                        <div class="my-2">
+                            <small>Image title</small>
+                            <input type="text" class="form-control form-control-sm" [(ngModel)]="optionData.title"
+                                [ngModelOptions]="{standalone: true}"
+                                (change)="optionPageValue(optionData.title, 'title')" />
+                        </div>
+
+                        <div class="my-2">
+                            <small>Alt text</small>
+                            <input type="text" class="form-control form-control-sm" [(ngModel)]="optionData.alt"
+                                [ngModelOptions]="{standalone: true}"
+                                (change)="optionPageValue(optionData.alt, 'alt')" />
+                        </div>
+
+                        <div class="my-2">
+                            <small>Class</small>
+                            <input type="text" class="form-control form-control-sm" [(ngModel)]="optionData.img_class"
+                                [ngModelOptions]="{standalone: true}"
+                                (change)="optionPageValue(optionData.img_class, 'img_class')" />
+                        </div>
+
+                        <div class="my-2">
+                            <small>Height</small>
+                            <input type="text" placeholder="160" class="form-control form-control-sm" [(ngModel)]="optionData.img_height"
+                                [ngModelOptions]="{standalone: true}"
+                                (change)="optionPageValue(optionData.img_height, 'img_height')" />
+                        </div>
+
+                        <div class="my-2">
+                            <small>Cover</small>
+                            <select class="form-control form-control-sm" [(ngModel)]="optionData.is_cover_image_style"
+                            [ngModelOptions]="{standalone: true}" (change)="optionPageValue(optionData.is_cover_image_style, 'is_cover_image_style')">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+              
+                        </div>
+
+                        <!--
+                        <div class="sys-label mt-3">Link</div>
+
+                        
+                        <div class="my-2 mt-3">
+                            <select class="form-control form-control-sm">
+                                <option>No</option>
+                                <option>Yes</option>
+                            </select>
+                        </div>
+
+                        <div class="my-2">
+                            <small>Select page</small>
+                            <input type="text" class="form-control form-control-sm" />
+                        </div>
+
+                        <div class="my-2">
+                            <small>Custom link</small>
+                            <input type="text" class="form-control form-control-sm" />
+                        </div>
+
+                        <mat-checkbox>Open in new tab</mat-checkbox>-->
+
+
+                        <div class="sys-label mt-3">Hover effect</div>
+
+                        <div class="my-2 ">
+                            <small>Select effect</small>
+                            <input type="text" class="form-control form-control-sm" />
+                        </div>
+
+                    </ng-container>
+                </ng-container>
+
+                <div class="my-2" *ngIf="sidebarOption && sidebarOption != 'image'">
+
+                    <div class="sys-label">Background</div>
+
+                    <div class="py-3">
+
+                        <div class="mb-2">
+                            <small>Color</small>
+                        </div>
+
+                        <div class="d-flex">
+                            <div [style.background]="optionData.background_color"
+                                style="width: 25px; height: 25px; border: 1px solid #ccc; cursor: pointer;"
+                                [cpPosition]="'left'" [cpPositionOffset]="'50%'" [cpPositionRelativeToArrow]="true"
+                                [(colorPicker)]="optionData.background_color"
+                                (colorPickerSelect)="optionPageValue(optionData.background_color, 'background_color')">
+                            </div>
+                            <ng-container *ngIf="optionData.background_color">
+                                <div class="btn btn-sm btn-outline-danger ml-2" style="padding: .1rem .4rem;" (click)="optionPageValue('', 'background_color')">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </ng-container>
+                        </div>
+
+                        <app-upload-image [small]="true" (data)="onBackgroundImage($event)" (delete)="onDeleteBackgroundImage()"
+                            [img]="optionData.background_image"></app-upload-image>
+
+                        <ng-container *ngIf="optionData.background_image">
+
+                            <select [(ngModel)]="optionData.background_style" [ngModelOptions]="{standalone: true}" (change)="optionPageValue(optionData.background_style, 'background_style')">
+                                <option value="repeat">Repeat</option>
+                                <option value="cover">Cover</option>
+                                <option value="no-repeat">No-repeat</option>
+                            </select>
+
+                        </ng-container>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+</ng-container>

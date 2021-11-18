@@ -1,0 +1,12 @@
+.menu-action-button {
+    color: #6c757d;
+    cursor: pointer;
+
+    &:hover {
+        color: #007bff;
+    }
+
+    &.active {
+        color: #007bff;
+    }
+}

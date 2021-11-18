@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content class="mb-2">
+
+    <ng-container *ngIf="!loading">
+
+        <ng-container *ngIf="pages.length == 0">No pages to add.</ng-container>
+
+        <ng-container *ngIf="pages.length > 0">
+
+            <ul class="list-unstyled menu-pages-list">
+                <li *ngFor="let page of pages">
+                    <mat-checkbox [(ngModel)]="page.selected">
+                        {{ page.title }}
+                        <ng-container *ngIf="page.homepage">
+                            <span class="text-muted">(homepage)</span>
+                        </ng-container>
+                    </mat-checkbox>
+                </li>
+            </ul>
+
+        </ng-container>
+
+    </ng-container>
+
+
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">
+  <button class="btn btn-primary" (click)="addToMenu()">Add to menu</button>
+  <button class="btn btn-outline-secondary ml-2" [mat-dialog-close]="false">Cancel</button>    
+</mat-dialog-actions>

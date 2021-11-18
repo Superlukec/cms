@@ -1,0 +1,3 @@
+<ng-container *ngIf="visible && html">
+  <div [innerHTML]="html | sanitizeHtml" routeDirective></div>  
+</ng-container>

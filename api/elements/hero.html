@@ -1,0 +1,14 @@
+{{#if value}}
+    <div class="w-100 {{ options.alignment }} {{ options.text_align }} {{ options.margin }} {{ options.padding }}">
+        <div class="{{ options.size }}">
+            <div style="color: {{ options.title_color }}">
+                {{ value }}
+            </div>
+            {{#if options.subtitle}}
+            <div>
+            <small style="color: {{ options.subtitle_color }}">{{ options.subtitle }}</small>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+{{/if}}

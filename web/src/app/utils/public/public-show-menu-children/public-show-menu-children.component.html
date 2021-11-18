@@ -1,0 +1,31 @@
+<ng-container *ngIf="!loading">
+    <div class="show-children">
+        <div class="container" *ngIf="children.length > 0">
+            <div class="row">
+                <div class="col-12 col-md-6 mb-3" *ngFor="let c of children">
+                
+                    <div class="card border-0 link-block h-100">
+                        <div class="d-flex flex-column m-4">
+
+                            <!--<ng-container *ngIf="!c.page_id.featured_image">-->
+                                <div class="my-3">
+                                    <a routerLink="//{{ c.page_id.slug }}" class="stretched-link">
+                                        <i class="fas fa-link" style="font-size: 1.6rem;"></i> 
+                                    </a>
+                                </div>
+                            <!--</ng-container>-->
+
+                            <div class="lead">{{ c.page_id.title }}</div>
+
+                            <div class="mt-3 show-children--desc" *ngIf="c.page_id.meta_description">
+                                {{ c.page_id.meta_description }}
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

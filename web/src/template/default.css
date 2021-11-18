@@ -1,0 +1,31 @@
+/**
+  * FOOTER
+  */
+.footer {
+    width: 100%;
+    min-height: 300px;
+    background: #1e1e1e;    
+}
+
+.footer .main {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.footer .footer-menu {
+  padding-top: 2rem;
+  margin-right: 4rem;
+}
+
+.footer .footer-menu li {
+  display: block;
+  padding-bottom: 1rem;
+}
+
+.footer .footer-menu, .footer .footer-menu a {
+    color: #b4b4b4;    
+}
+
+.footer .footer-menu a:hover {
+  text-decoration: none;
+}

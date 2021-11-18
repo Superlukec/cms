@@ -1,0 +1,120 @@
+<div class="h-100 bg-1">
+    <div class="h-100 container">
+
+        <div class="row h-100 d-flex justify-content-center align-items-center">
+
+            <div class="col-12 col-md-6">
+
+                
+
+                <div class="card border-0 shadow">
+
+                    <div class="text-center my-2">
+                        <h1>Bootspace.io <div class="text-muted" style="font-size: 0.6em;">Install the system</div>
+                        </h1>
+                    </div>
+
+                    <div class="card-body">
+
+                        <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate class="h-100">
+
+
+                            <h3>System</h3>
+
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control" formControlName="title"
+                                    placeholder="My new website"
+                                    [ngClass]="{ 'is-invalid': submitted && f.title.errors }" />
+                                <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
+                                    <div *ngIf="f.title.errors.required">Required field</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Domain</label>
+                                <input type="text" class="form-control" formControlName="domain"
+                                    placeholder="website.com"
+                                    [ngClass]="{ 'is-invalid': submitted && f.domain.errors }" />
+                                <div *ngIf="submitted && f.domain.errors" class="invalid-feedback">
+                                    <div *ngIf="f.domain.errors.required">Required field</div>
+                                </div>
+
+                                <div class="text-muted mt-2" style="font-size: .8rem">
+                                    API url:
+                                    <div class="border p-2">
+                                        <span *ngIf="!f.domain.value">//api.website.com</span>
+                                        <span *ngIf="f.domain.value">//api.{{ f.domain.value }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <h3>Admin</h3>
+
+                            <div class="form-group">
+
+                                <div class="form-group">
+                                    <label>E-mail</label>
+                                    <input type="text" class="form-control" formControlName="email"
+                                        [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                        <div *ngIf="f.email.errors.required">Required field</div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row mb-3">
+                                    <div class="col">
+
+                                        <label>First name</label>
+                                        <input type="text" class="form-control" formControlName="firstName"
+                                            [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+                                        <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                                            <div *ngIf="f.firstName.errors.required">Required field</div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col">
+
+                                        <label>Last name</label>
+                                        <input type="text" class="form-control" formControlName="lastName"
+                                            [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+                                        <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                                            <div *ngIf="f.lastName.errors.required">Required field</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Password <span style="font-size: .8em;">(min. length 8
+                                            characters)</span></label>
+                                    <input type="text" class="form-control" formControlName="password"
+                                        [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                                        <div *ngIf="f.password.errors.required">Required field</div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="mt-4 btn btn-block btn-outline-primary">Create site</button>
+
+
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+</div>

@@ -1,0 +1,123 @@
+<div *ngIf="!loading">
+    <div class="row my-3">
+
+        <div *ngFor="let c of blocks; let i = index" class="col {{ (c.options && c.options.column_width) ? c.options.column_width : '' }}" 
+            (click)="selectSubComponent(c.type, i)"
+            (mouseenter)="showRemoveButton(c, true)"
+            (mouseleave)="showRemoveButton(c, false)"
+        >
+            <div class="border border-dashed p-2" 
+                 [ngClass]="{ 'component-selected-border-inner' : (c.selected) }"><!-- lsResizable>-->
+
+
+                <div class="label-component-position border" *ngIf="c.type">
+                    {{ c.type | uppercase }}                    
+                </div>
+
+                <div class="remove-component-position"
+                    [ngClass]="{ 'd-block' : c.showDelete }">
+
+                    <button type="button"
+                        class="btn btn-outline-secondary btn-circle remove-component btn-sm mr-2" (click)="changeComponent(c)"
+                        ><i class="fas fa-pen"
+                            style="margin-top: -1px;margin-left: -2px;"></i></button>
+
+                    <button type="button"
+                        class="btn btn-outline-primary btn-circle remove-component btn-sm mr-2"
+                        cdkDragHandle><i class="fas fa-arrows-alt"
+                            style="margin-top: -1px;margin-left: -2px;"></i></button>
+
+                    <button type="button"
+                        class="btn btn-outline-danger btn-circle remove-component btn-sm"
+                        (click)="removeComponent(c)"><i class="fas fa-times"
+                            style="margin-top: -1px;margin-left: -1px;"></i></button>
+
+                </div>
+
+                <div class="row text-center editor-components p-3" *ngIf="!c.type">
+
+                    <ng-container  *ngFor="let o of componentsOptions">
+                        <div class="col-4" *ngIf="!o.hideFromColumns">
+                            <div class="element" (click)="selectElement(c._id, o.action)">
+                                <i class="{{ o.icon }}"></i>
+                                <div>{{ o.name }}</div>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <!--
+                    <div class="col-4">
+                        <div class="element" (click)="selectElement(c._id, 'paragraph')">
+                            <i class="fas fa-paragraph"></i>
+                            <div>Paragraph</div>
+                        </div>
+                    </div>                    
+                    <div class="col-4" (click)="selectElement(c._id, 'image')">
+                        <div class="element">
+                            <i class="fas fa-image"></i>
+                            <div>Image</div>
+                        </div>
+                    </div>
+                    <div class="col-4" (click)="selectElement(c._id, 'form')">
+                        <div class="element">
+                            <i class="far fa-envelope"></i>
+                            <div>Form</div>
+                        </div>
+                    </div>
+                    <div class="col-4" (click)="selectElement(c._id, 'html')">
+                        <div class="element">
+                            <i class="fas fa-code"></i>
+                            <div>HTML</div>
+                        </div>
+                    </div>                    
+                    <div class="col-4" (click)="selectElement(c._id, 'hero')">
+                        <div class="element">
+                            <i class="fas fa-mask"></i>
+                            <div>Hero</div>
+                        </div>
+                    </div>
+                    <div class="col-4" (click)="selectElement(c._id, 'gallery')">
+                        <div class="element">
+                            <i class="fas fa-images"></i>
+                            <div>Gallery</div>
+                        </div>
+                    </div>
+                    <div class="col-4" (click)="selectElement(c._id, 'button')">
+                        <div class="element">
+                            <i class="fas fa-mouse-pointer"></i>
+                            <div>Button</div>
+                        </div>
+                    </div>
+                    -->
+                </div>
+
+                <div *ngIf="c.type == 'paragraph'">
+                    <app-ckeditor [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'fontColor', 'alignment', '|', 'bulletedList', 'numberedList', '|', 'insertTable','mediaEmbed', '|', 'undo', 'redo' ] }" [data]="c.value" (output)="onCkEditorValue(c._id, $event)"></app-ckeditor>
+                </div>
+                <!--
+                <div *ngIf="c.type == 'space'" style="height: 50px">
+                </div>-->
+                <div *ngIf="c.type == 'image'">
+                    <app-upload-image (data)="onImageUpload(c._id, $event)" (delete)="onDelete(c._id)" [img]="c.value"></app-upload-image>
+                </div>
+                <div *ngIf="c.type == 'html'">
+                    <app-insert-html (output)="onHTMLData(c._id, $event)" [data]="c.value"></app-insert-html>
+                </div>
+                <div *ngIf="c.type == 'hero'">
+                    <app-insert-hero (output)="onHeroData(c._id, $event)" [data]="c"></app-insert-hero>
+                </div>
+                <div *ngIf="c.type == 'form'">
+                    <app-show-form [lang]="lang" (output)="onFormData(c._id, $event)" [data]="c"></app-show-form>
+                </div>
+                <div *ngIf="c.type == 'gallery'">
+                    <app-add-gallery (output)="onGallerysData(c._id, $event)"
+                        [data]="c" [small]="true"></app-add-gallery>
+                </div>
+                <div *ngIf="c.type == 'button'">
+                    <app-add-button (output)="onButtonData(c._id, $event)"
+                        [data]="c"></app-add-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

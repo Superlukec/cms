@@ -1,0 +1,235 @@
+<ng-container *ngIf="!loading">
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate class="h-100 d-flex flex-column">
+
+        <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-4">
+
+            <div class="d-flex text-muted">
+            </div>
+
+            <div>
+                <div class="btn btn-outline-danger btn mr-3 mr-md-5" *ngIf="id" (click)="deleteShareable()">
+                    <i class="far fa-trash-alt"></i>
+                </div>
+
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-save"></i>&nbsp;
+                    Save
+                </button>
+            </div>
+
+        </div>
+
+        <div class="d-flex h-100">
+            <div class="col h-100" style="overflow-y: auto;">
+                <div class="container h-100">
+
+                    <h4 class="my-4">
+                        <ng-container *ngIf="!id">Add shareable</ng-container>
+                        <ng-container *ngIf="id">Edit shareable</ng-container>
+                    </h4>
+
+                    <div class="row mb-4" *ngIf="id">
+                        <div class="col">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item">
+                                  <div class="nav-link pointer" (click)="showPage('info')" [ngClass]="{ 'active' : (subpage == 'info'), 'text-primary' : (subpage != 'info') }">Info</div>
+                                </li>
+                                <li class="nav-item">
+                                  <div class="nav-link pointer" (click)="showPage('download')" [ngClass]="{ 'active' : (subpage == 'download'), 'text-primary' : (subpage != 'download') }">Downloads ({{ downloaded.length  }})</div>
+                                </li>
+                              </ul>
+                        </div>
+                    </div>
+
+                    <div class="row" [hidden]="subpage != 'info'">
+                        <div class="col-12 col-lg-6">
+
+                            <div class="form-group">
+                                <label>
+                                    Name
+                                    <div class="text-muted" style="font-size: 0.8em;">Shareable name</div>
+                                </label>
+                                <input type="text" class="form-control" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.name.errors.required">Required field</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    Duration
+                                    <div class="text-muted" style="font-size: 0.8em;">Files availability limitation
+                                    </div>
+                                </label>
+                                <select class="form-control" [(ngModel)]="duration" [ngModelOptions]="{standalone: true}" (change)="onChangeDuration($event.target.value)">
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" *ngIf="duration == 'true'">
+                                <input class="form-control" style="display: inline!important; width: auto!important;" [matDatepicker]="myDatepicker1" formControlName="durationTime" placeholder="Select date" [ngClass]="{ 'is-invalid': submitted && f.durationTime.errors }" disabled>
+                                <mat-datepicker-toggle [for]="myDatepicker1"></mat-datepicker-toggle>
+                                <mat-datepicker #myDatepicker1 disabled="false"></mat-datepicker>
+
+                                <div *ngIf="submitted && f.durationTime.errors" class="invalid-feedback">
+                                    <div *ngIf="f.durationTime.errors.required">Required field</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    Limit download
+                                    <div class="text-muted" style="font-size: 0.8em;">Limit how many times files can be downloaded</div>
+                                </label>
+                                <select class="form-control" [(ngModel)]="limitDownload" [ngModelOptions]="{standalone: true}" (change)="onLimitDownloadChange($event.target.value)">
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" *ngIf="limitDownload == 'true'">
+                                <input class="form-control" type="number" style="width: initial;" formControlName="downloadNumber" placeholder="1" [ngClass]="{ 'is-invalid': submitted && f.downloadNumber.errors }" />
+                                
+
+                                <div *ngIf="submitted && f.downloadNumber.errors" class="invalid-feedback">
+                                    <div *ngIf="f.downloadNumber.errors.required">Required field</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    Limit access
+                                    <div class="text-muted" style="font-size: 0.8em;">Limit access to specific users</div>
+                                </label>
+                                <select class="form-control" [(ngModel)]="limitAccess" [ngModelOptions]="{standalone: true}" (change)="onLimitAccessChange($event.target.value)">
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+
+                            <ng-container *ngIf="limitAccess == 'true'">
+                                <div class="form-group">
+                                    <label>
+                                        Access
+                                        <div class="text-muted" style="font-size: 0.8em;">The people who will have
+                                            access to this files</div>
+                                    </label>
+
+                                    <div class="mt-2 mb-4 table-container">                                                                                
+                                        <ng-container *ngIf="users.length > 0">
+
+                                            <ng-container *ngIf="users.length > 1">
+                                                <div class="my-2">
+                                                    <input (keyup)="searchPeople($event)" type="text" class="form-control form-control-sm" placeholder="Search people ..." style="width: initial;" />
+                                                </div>
+                                            </ng-container>
+
+                                            <table mat-table [dataSource]="pagesData" class="mat-elevation-z0 w-100">
+
+                                                <ng-container matColumnDef="select">
+                                                    <th mat-header-cell *matHeaderCellDef> &nbsp; </th>
+                                                    <td mat-cell *matCellDef="let element" class="text-muted">
+                                                        <mat-checkbox [(ngModel)]="element.selected" [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="email">
+                                                    <th mat-header-cell *matHeaderCellDef> E-mail </th>
+                                                    <td mat-cell *matCellDef="let element" class="text-muted">{{element.email }}</td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="name">
+                                                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                                                    <td mat-cell *matCellDef="let element" class="text-muted">{{element.full_name }}</td>
+                                                </ng-container>
+
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                            </table>
+
+                                        </ng-container>
+                                        <div class="border bg-white p-2" *ngIf="users.length == 0"> 
+                                            No users.
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2 mt-4 d-flex align-items-center" style="font-size: 0.9em;">
+                                        <mat-checkbox [(ngModel)]="sendEmail" [ngModelOptions]="{standalone: true}"></mat-checkbox> 
+                                        <div class="ml-2 mb-2">Notify clients by e-mail</div>
+                                    </div>
+
+                                    <div class="btn btn-outline-primary btn-sm btn-block" (click)="addUser()">Add user</div>
+
+                                </div>
+                            </ng-container>
+
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            Files
+                            <div class="text-muted" style="font-size: 0.8em;">Uploaded files</div>
+
+                            <div *ngIf="files.length > 0">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 my-4" *ngFor="let f of files">
+                                        <div style="position: absolute; right: 0; margin-top: -15px; width: 35px; z-index: 9;" class="p-2 btn-circle text-center pointer btn-danger" title="Delete" (click)="deleteFile(f._id)">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </div>
+                                        <div class="bg-white p-2" style="width: 100%; height: 150px;">
+                                            <div class="h-100 d-flex justify-content-center align-items-center">
+                                                <div class="text-center">
+                                                    <i class="far fa-file" style="font-size: 2rem;"></i>
+                                                    <div style="word-break: break-all;">{{ f.original_name }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <app-upload-file dragDrop="true" (data)="onFileUpload($event)"></app-upload-file>
+                        </div>
+                    </div>
+
+                    <div class="row" [hidden]="subpage != 'download'">
+                        <div class="col-12">
+                            <ng-container *ngIf="downloaded.length == 0">
+                                No downloads.
+                            </ng-container>
+                            <ng-container *ngIf="downloaded.length > 0">
+                                <table class="table table-hover table-bordered table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <td>User</td>
+                                            <td>Date</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let d of downloaded; let i = index">
+                                            <td class="align-middle">{{ i + 1 }}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <app-user-avatar [info]="d.user_id"></app-user-avatar>
+                                                    <div class="ml-2" *ngIf="d.user_id">
+                                                        {{ d.user_id.full_name }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle">{{ d.date_created | date: "medium" }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </form>
+</ng-container>

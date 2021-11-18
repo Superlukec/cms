@@ -1,0 +1,44 @@
+<ng-container *ngIf="!hideCookieConsent">
+    <nav class="p-2 cookie-height fixed-bottom navbar-dark bg-primary" [ngClass]="{ 'cookie-box-expand': expandBox === true, 'cookie-box-collapse': expandBox === false }">
+        <div class="d-md-flex align-items-center">
+
+            <div class="text-white mr-2 d-none d-md-block" style="font-size: 2em;">
+                <i class="fas fa-cookie-bite"></i>
+            </div>
+
+            <div class="text-white mr-2">{{ cookieInfo.text }}</div>
+
+            <div class="d-flex mt-4 mt-md-0">
+                <div *ngIf="cookieInfo.more_information">
+                    <div class="btn btn-outline-light" (click)="moreInfo()">{{ cookieInfo.more_information }}</div>
+                </div>
+                <div class="ml-2">
+                    <div class="btn btn-light" (click)="agree()">{{ cookieInfo.agree_text }}</div>
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="expandBox" class="text-white">
+
+            <ng-container *ngIf="cookieInfo.cookie_information">
+                <h5 style="font-size: 1.2em" class="mt-3">{{ cookieInfo.cookie_information }}</h5>
+            </ng-container>
+
+            <div class="row">
+
+                <div class="col-12 col-md-6">
+
+                    <table class="border table table-sm table-borderless w-50 text-white w-100" style="font-size: .8em">
+                        <tr *ngFor="let c of cookieInfo.cookies">
+                            <td class="border">{{ c.name }}</td>
+                            <td class="border">{{ c.text }}</td>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    </nav>
+</ng-container>

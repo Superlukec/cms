@@ -1,0 +1,29 @@
+<div class="p-5">
+    <div class="d-flex justify-content-center">
+        <div class="w-75">
+
+            <div class="text-center my-2">
+                <h4>Google Maps<br>
+                    <small class="text-muted">Enter latitude and longitude</small>
+                </h4>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <small>Lat</small>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="lat" [ngModelOptions]="{standalone: true}" (change)="dataChange()" />
+                    </div> 
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <small>Lon</small>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="lon" [ngModelOptions]="{standalone: true}" (change)="dataChange()" />
+                    </div>
+                </div>
+            </div>
+            
+        </div>        
+    </div>
+    
+</div>

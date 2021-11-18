@@ -1,0 +1,11 @@
+<ng-container *ngIf="info">
+    <ng-container *ngIf="info.full_name">
+        <div class="user-avatar" [ngStyle]="{background: info.color, color: textColor, width: customWidth, height: customWidth }" title="{{ info.full_name }}">{{ info.initials }}</div> 
+    </ng-container>
+    <ng-container *ngIf="!(info.full_name)">
+        /
+    </ng-container>
+</ng-container>
+<ng-container *ngIf="!info">
+    /
+</ng-container>

@@ -1,0 +1,167 @@
+<div [hidden]="loading">
+
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate class="h-100 d-flex flex-column">
+
+        <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-4">
+
+
+            <div class="d-flex text-muted">
+            </div>
+
+            <div>
+                <button class="btn btn-primary ml-2" type="submit">Save</button>
+            </div>
+
+
+        </div>
+
+        <div class="d-flex align-items-stretch flex-grow-1 overflow-y">
+            <div class="w-100 h-100 overflow-y">
+
+                <div class="container mb-5">
+
+                    <h4 class="mt-4">
+                        <ng-container *ngIf="!id">Add new template</ng-container>
+                        <ng-container *ngIf="id">Edit template</ng-container>
+                    </h4>
+
+                
+                    <div class="row  my-4">                        
+                        <div class="col-12 col-md-6">
+
+                            <div class="form-group">
+                                <label>
+                                    Template name
+                                </label>
+                                <input type="text" class="form-control input-lg" placeholder="Template 1"
+                                    formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                                
+                                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.name.errors.required">Required field</div>
+                                </div>
+                            </div>
+                        
+                            <div class="form-group">
+                                <label>
+                                    Description
+                                </label>
+                                
+                                <ng-container *ngIf="!loading">
+                                    <div class="bg-white border" [ngClass]="{ 'border-danger': submitted && f.description.errors }">
+                                        <app-ckeditor
+                                            [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'blocks' ] }"
+                                            [data]="f.description.value" (output)="onCkEditorValue($event)">
+                                        </app-ckeditor>
+                                    </div>
+                                </ng-container>
+
+                                
+                                <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                                    <div *ngIf="f.description.errors.required">Required field</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>
+                                    HTML (template)
+                                </label>
+                                <textarea type="text" class="form-control html-editor" formControlName="html" #templatehtml></textarea>
+                            </div>
+
+
+
+                            
+                        </div>
+                        <div class="col-12 col-md-6">
+
+                            <div class="mb-2">
+                                <label>Template fields</label>
+                                <div class="border p-3">
+
+                                    <ng-container *ngIf="fields.length == 0">
+                                        <div class="font-italic">
+                                            No fields.
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="fields.length > 0">
+                                        <ul class="list-unstyled mb-0">
+                                            <li *ngFor="let field of fields; let i = index">
+                                                <div class="card mb-2">
+                                                    <div class="card-body">
+                                                        <div class="d-flex align-items-center">
+                                                            
+                                                            <h5 class="card-title">{{ field.label }}</h5>
+                                                            
+                                                            <div class="ml-auto" (click)="removeField(i)">
+                                                                <div class="btn text-danger btn-sm">
+                                                                    <i class="fas fa-times"></i>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <span ng-non-bindable>{{</span> {{ field.name }} <span ng-non-bindable>}}</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </ng-container>
+
+                                </div>
+                            </div>
+
+                            <div class="border bg-white p-3">
+                                <div class="form-group">
+
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="text-primary" style="font-size: 1.2rem;">
+                                            <i class="fas fa-boxes"></i>
+                                        </div>
+                                        <h4 class="mb-0 ml-3">Add template field</h4>
+                                    </div>
+
+                                    <form [formGroup]="fieldForm" (ngSubmit)="addField()" novalidate>
+
+                                        <div class="form-group">
+                                            <div class="mb-2">
+                                                <label class="mb-0">Label</label>
+                                                <div class="text-muted" style="font-size: .8em">User friendly name</div>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Field name"  formControlName="label" [ngClass]="{ 'is-invalid': submittedField && f2.label.errors }"/>
+                                            <div *ngIf="submittedField && f2.label.errors" class="invalid-feedback">
+                                                <div *ngIf="f2.label.errors.required">Required field</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="mb-2">
+                                                <label class="mb-0">Name</label>
+                                                <div class="text-muted" style="font-size: .8em">Only alphabetic, lowercases and no spaces</div>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="fieldname" formControlName="name" [ngClass]="{ 'is-invalid': submittedField && f2.name.errors }" />
+                                            <div *ngIf="submittedField && f2.name.errors" class="invalid-feedback">
+                                                <div *ngIf="f2.name.errors.required">Required field</div>
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-outline-primary btn-sm mt-2" type="submit">Add field</button>
+
+                                    </form>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                   
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+</div>

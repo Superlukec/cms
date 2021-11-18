@@ -1,0 +1,7 @@
+<app-show-forms *ngIf="!page"></app-show-forms>
+
+<app-new-form *ngIf="page == 'new'"></app-new-form>
+
+<app-new-form [id]="formId" *ngIf="formId && page != 'new'"></app-new-form>
+
+<app-form-submissions *ngIf="page == 'submissions'"></app-form-submissions>

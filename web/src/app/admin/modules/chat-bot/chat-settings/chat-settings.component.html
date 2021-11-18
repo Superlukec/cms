@@ -1,0 +1,393 @@
+<ng-container *ngIf="!loading">
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" class="h-100 d-flex flex-column">
+        <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-4">
+
+
+            <div class="d-flex text-muted">
+            </div>
+
+            <div>
+                <button class="btn btn-primary ml-2" type="submit">Update</button>
+            </div>
+
+
+        </div>
+
+        <div class="d-flex h-100">
+            <div class="col h-100" style="overflow-y: auto;">
+
+                <div class="container-fluid h-100">
+
+                    <h2 class="pt-4">Chatbot settings</h2>
+
+                    <div class="pb-4 _chat-settings">
+
+                        <div class="_general-settings">
+
+
+
+                            <h4 class="mt-4 mb-3 text-muted">General settings</h4>
+
+
+                            <div class="form-group my-3">
+                                <label>Activate chatbot <br><small class="text-muted">The main setting for chatbot
+                                        visibility</small></label>
+                                <select class="form-control _my-w-50" formControlName="chatEnabled" (change)="chatEnableChange(f.chatEnabled.value)">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group my-3"
+                                [hidden]="f.chatEnabled.value == 'false' || f.chatEnabled.value == false">
+                                <label>Working hours <br><small class="text-muted">Set up working hours for
+                                        chatbot</small></label>
+                                <select class="form-control _my-w-50" formControlName="workingHours">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+
+                                <div class="my-3 _my-w-50"
+                                    *ngIf="f.workingHours.value == 'true' || f.workingHours.value == true">
+                                    <select class="form-control" formControlName="workingHoursType" (change)="changeWorkingHours(f.workingHoursType.value)">
+                                        <option value="weekdays">Weekdays</option>
+                                        <option value="everyday">Everyday</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+
+
+                                    <div class="mt-2" *ngIf="f.workingHoursType.value == 'weekdays' || f.workingHoursType.value == 'everyday'">
+
+                                        <ng-container *ngIf="f.workingHoursType.value == 'weekdays'">
+
+                                            <table class="table table-sm table-borderless">                                                                            
+                                                <tr>
+                                                    <td class="pointer" (click)="editSingleHour(false, weekDays[1])">
+                                                        {{ weekDays[1].fromHour | leadingZero }}:{{ weekDays[1].fromMinutes | leadingZero }} - {{ weekDays[1].toHour | leadingZero }}:{{ weekDays[1].toMinutes | leadingZero }}
+                                                    </td>
+                                                    <td class="pointer">
+                                                        <i class="fas fa-pen-square text-primary" (click)="editSingleHour(false, weekDays[1])"></i>
+                                                    </td>
+                                                </tr>                                           
+                                            </table>
+
+                                        </ng-container>
+
+                                        <ng-container *ngIf="f.workingHoursType.value == 'everyday'">
+
+                                            <table class="table table-sm table-borderless">                                                                            
+                                                <tr>
+                                                    <td class="pointer" (click)="editSingleHour(true, weekDays[1])">
+                                                        {{ weekDays[1].fromHour | leadingZero }}:{{ weekDays[1].fromMinutes | leadingZero }} - {{ weekDays[1].toHour | leadingZero }}:{{ weekDays[1].toMinutes | leadingZero }}
+                                                    </td>
+                                                    <td class="pointer">
+                                                        <i class="fas fa-pen-square text-primary" (click)="editSingleHour(true, weekDays[1])"></i>
+                                                    </td>
+                                                </tr>                                           
+                                            </table>
+
+                                        </ng-container>
+                                    
+                                    </div>
+
+                                    <div class="mt-2" *ngIf="f.workingHoursType.value == 'custom'">
+
+                                        <table class="table table-sm table-borderless">
+                                            <ng-container *ngFor="let w of weekDays">                                                
+                                                <tr>
+                                                    <td class="text-muted">
+                                                        {{ w.label }}
+                                                    </td>
+                                                    <ng-container *ngIf="!w.closed">
+                                                        <td class="pointer" (click)="editMultiHour()">
+                                                            {{ w.fromHour | leadingZero }}:{{ w.fromMinutes | leadingZero }} - {{ w.toHour | leadingZero }}:{{ w.toMinutes | leadingZero }}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="w.closed">
+                                                        <td class="pointer" (click)="editMultiHour()">
+                                                            Closed
+                                                        </td>
+                                                    </ng-container>
+                                                    <td class="pointer" (click)="editMultiHour()">
+                                                        <i class="fas fa-pen-square text-primary"></i>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div [hidden]="f.chatEnabled.value == 'false' || f.chatEnabled.value == false">
+
+
+
+                            <h4 class="mt-4 mb-3 text-muted">Chatbot text</h4>
+                           
+                            <div class="my-2 font-italic">Here you can setup custom text for chatbot.</div>
+
+                            <div class="my-4">
+                                <div class="btn btn-outline-success btn-sm" (click)="loadChatTemplate()">Load text from template</div>
+                            </div>
+
+                            <!--<ng-container *ngIf="multilanguage">-->
+
+                                <mat-tab-group (selectedTabChange)="onChangeLang($event.index)">
+
+                                    <mat-tab *ngFor="let lang of textData">
+
+                                        <ng-template mat-tab-label>
+                                            {{ lang.language }}
+                                            <span class="ml-2" *ngIf="lang.error">
+                                                <i class="fas fa-exclamation-triangle text-danger"></i>
+                                            </span>
+                                        </ng-template>
+
+                                        <div class="my-3 p-4 border shadow-sm bg-white">
+                                            <h5>First page</h5>
+
+                                            <div class="d-flex align-content-stretch mt-4">
+                                                <div style="width: 300px;">
+
+                                                    <div class="w-100 border p-2 h-100">
+                                                        <!-- dialog --> 
+                                                        <div class="_chatbox-greeting h-100 w-100 d-flex align-items-center justify-content-center">
+                                                            <div class="text-center">
+                                                                <ng-container *ngIf="lang.introText">
+                                                                    <div [innerHTML]="lang.introText"></div>
+                                                                </ng-container>   
+                                                                <ng-container *ngIf="lang.introBtn">
+                                                                    <div class="btn btn-outline-primary mt-2">{{ lang.introBtn }}</div>
+                                                                </ng-container>                                                             
+                                                            </div>                                                           
+                                                        </div>
+                                                        <!-- dialog --> 
+                                                    </div>
+
+                                                </div>
+                                                <div class="flex-grow-1 ml-4">
+
+                                                    <div class="my-2">
+                                                        <label>Intro text <br><small class="text-muted">First time visit
+                                                                text</small></label>
+                                                        <div class="bg-white border"
+                                                            [ngClass]="{ 'border-danger': submitted && lang.error && lang.introText.length == 0 }">
+                                                            <app-ckeditor
+                                                                [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic' ] }"
+                                                                [data]="lang.introText"
+                                                                (output)="onCkEditorValue($event, 'introText')">
+                                                            </app-ckeditor>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="my-2 mt-4">
+                                                        <label>Send message <span class="text-muted"
+                                                                style="font-size: .8rem;">(button)</span> <br><small
+                                                                class="text-muted">Translation</small></label>
+                                                        <input class="form-control" [(ngModel)]="lang.introBtn"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            [ngClass]="{ 'is-invalid': submitted && lang.error && (!lang.introBtn || lang.introBtn.length == 0) }" />
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="my-3 p-4 border shadow-sm bg-white">
+
+                                            <h5>Second page</h5>
+
+
+                                            <div class="d-flex align-content-stretch mt-4">
+                                                <div style="width: 300px;">
+
+                                                    <div class="w-100 border p-2 h-100">
+
+                                                        <!-- dialog --> 
+                                                        <div class="_chatbox-greeting h-100 w-100 d-flex align-items-center justify-content-center">                                                            
+                                                            <div class="px-3">
+                                                    
+
+                                                                <ng-container *ngIf="lang.contactText">
+                                                                    <div [innerHTML]="lang.contactText"></div>
+                                                                </ng-container>
+                                                                
+                                                    
+                                                                <div class="mt-2">
+                                                                    <input type="text" placeholder="{{ lang.yourEmail }}" class="form-control form-control-sm" />
+                                                                </div>
+                                                    
+                                                                <div class="mt-2">
+                                                                    <input type="text" placeholder="{{ lang.yourName }}" class="form-control form-control-sm" [(ngModel)]="firstName"
+                                                                        [ngModelOptions]="{standalone: true}" />
+                                                                </div>            
+                                                    
+                                                                <div class="mt-3 d-flex align-items-center" *ngIf="lang.privacyText">
+                                                                    <mat-checkbox style="margin-top: 4px;">
+                                                                    </mat-checkbox>
+                                                                    <a href="#" class="ml-2">{{ lang.privacyText }}</a>
+                                                                </div>
+                                                    
+                                                                <div class="btn btn-outline-primary mt-2" *ngIf="lang.continueText">{{ lang.continueText }}</div>
+                                                    
+                                                            </div>
+                                                        </div>
+                                                        <!-- dialog --> 
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="flex-grow-1 ml-4">
+
+                                                    <div class="my-2 mt-4">
+                                                        <label>Contact text <br><small class="text-muted">Why do we need
+                                                                customer's information</small></label>
+                                                        <div class="bg-white border"
+                                                            [ngClass]="{ 'border-danger': submitted && lang.error && lang.contactText.length == 0 }">
+                                                            <app-ckeditor
+                                                                [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic' ] }"
+                                                                [data]="lang.contactText"
+                                                                (output)="onCkEditorValue($event, 'contactText')">
+                                                            </app-ckeditor>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row my-2 mt-4">
+                                                        <div class="col">
+                                                            <label>Your e-mail<br><small
+                                                                    class="text-muted">Translation</small></label>
+                                                            <input class="form-control" [(ngModel)]="lang.yourEmail"
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                [ngClass]="{ 'is-invalid': submitted && lang.error && (!lang.yourEmail || lang.yourEmail.length == 0) }" />
+                                                        </div>
+                                                        <div class="col">
+                                                            <label>Your name (optional)<br><small
+                                                                    class="text-muted">Translation</small></label>
+                                                            <input class="form-control" [(ngModel)]="lang.yourName"
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                [ngClass]="{ 'is-invalid': submitted && lang.error && (!lang.yourName || lang.yourName.length == 0) }" />
+                                                        </div>
+                                                        
+                                                    </div>
+
+                                                    <div class="row my-2 mt-4">
+                                                        <div class="col">
+                                                            <label>Privacy text <br><small
+                                                                    class="text-muted">Translation</small></label>
+                                                            <input class="form-control" [(ngModel)]="lang.privacyText"
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                [ngClass]="{ 'is-invalid': submitted && lang.error && (!lang.privacyText || lang.privacyText.length == 0) }" />
+                                                        </div>
+                                                        <div class="col">
+                                                            <label>Privacy page link <br><small class="text-muted">Paste
+                                                                    link for the privacy policy</small></label>
+                                                            <input class="form-control" [(ngModel)]="lang.privacyLink"
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                [ngClass]="{ 'is-invalid': submitted && lang.error && (!lang.privacyLink || lang.privacyLink.length == 0) }" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row my-2 mt-4">
+                                                        <div class="col-6">
+                                                            <label>Continue text <span class="text-muted"
+                                                                style="font-size: .8rem;">(button)</span> <br><small
+                                                                class="text-muted">Translation</small></label>
+                                                        <input class="form-control" [(ngModel)]="lang.continueText"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            [ngClass]="{ 'is-invalid': submitted && lang.error && (!lang.continueText || lang.continueText.length == 0) }" />
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                        <div class="my-3 p-4 border shadow-sm bg-white">
+
+                                            <h5>Third page</h5>
+
+
+                                            <div class="d-flex align-content-stretch mt-4">
+                                                <div style="width: 300px;">
+
+                                                    <div class="w-100 border p-2 h-100 d-flex flex-column">
+
+                                                        <!-- dialog --> 
+                                                        <div class="_chatbox_messages flex-grow-1">
+                                                            <div class="p-2 d-flex align-items-end h-100">
+                                                
+
+                                                                <ng-container *ngIf="lang.welcomeText">
+                                                                    <div class="welcome-message text-muted">
+                                                                        {{ lang.welcomeText }}
+                                                                    </div>
+                                                                </ng-container>
+                                                
+                                                                
+                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="_chatbox_input border-top">
+                                                            <div class="d-flex align-items-center">
+                                                                <input type="text" class="form-control" style="border: 0;" placeholder="{{ lang.writeMessage }}"><i
+                                                                    class="fas fa-paper-plane text-primary pointer px-3"></i>
+                                                            </div>
+                                                        </div>
+                                                        <!-- dialog --> 
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="flex-grow-1 ml-4">
+
+                                                    <div class="my-2 mt-4">
+                                                        <label>How can we help you? <span class="text-muted"
+                                                                style="font-size: .8rem;">(text)</span><br><small
+                                                                class="text-muted">Write short welcome
+                                                                text</small></label>
+                                                        <input class="form-control" [(ngModel)]="lang.welcomeText"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            [ngClass]="{ 'is-invalid': submitted && lang.error && (!lang.welcomeText || lang.welcomeText.length == 0) }" />
+                                                    </div>
+
+                                                    <div class="my-2 mt-4">
+                                                        <label>Write message <br><small
+                                                                class="text-muted">Translation</small></label>
+                                                        <input class="form-control" [(ngModel)]="lang.writeMessage"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            [ngClass]="{ 'is-invalid': submitted && lang.error && (!lang.writeMessage || lang.writeMessage.length == 0) }" />
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+
+                                    </mat-tab>
+
+
+                                </mat-tab-group>
+
+
+                            <!--</ng-container>-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+</ng-container>

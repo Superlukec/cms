@@ -1,0 +1,12 @@
+<app-show-products *ngIf="!page"></app-show-products>
+
+<app-new-product *ngIf="page == 'new'"></app-new-product>
+
+<app-brands *ngIf="page == 'brands'"></app-brands>
+
+<app-properties *ngIf="page == 'properties'"></app-properties>
+
+<app-product-settings *ngIf="page == 'settings'"></app-product-settings>
+
+<app-new-product [id]="productId" *ngIf="productId && page != 'new'"></app-new-product>
+

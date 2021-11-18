@@ -1,0 +1,5 @@
+<app-show-users *ngIf="!page"></app-show-users>
+
+<app-new-user *ngIf="page == 'new'"></app-new-user>
+
+<app-new-user [id]="userId" *ngIf="userId && page != 'new'"></app-new-user>

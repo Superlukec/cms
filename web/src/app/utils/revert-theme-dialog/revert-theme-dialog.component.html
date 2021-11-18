@@ -1,0 +1,43 @@
+<h2 class="mb-0" mat-dialog-title>Revert theme</h2>
+<small class="text-muted">Revert your theme to previous version. The system stores up to 10 versions.</small>
+<mat-dialog-content>
+
+    <div class="my-3">
+
+        <ng-container *ngIf="error">
+            <div class="alert alert-warning" style="font-size: 1.2em;" role="alert">
+                {{ error_msg }}
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="!error">
+
+            <ng-container *ngIf="variations.length == 0">
+                No variations available.
+            </ng-container>
+
+            <ng-container *ngIf="variations.length > 0">
+                <table class="table-sm table table-borderless">
+                    <tr *ngFor="let v of variations; let i = index" class="my-2">
+
+                        <td>{{ v.date_created | date: "medium" }}</td>
+                        <td>
+                            <div class="btn btn-sm btn-primary" (click)="select(i)">Select</div>
+
+                            <div class="btn btn-sm btn-outline-primary ml-2" (click)="preview(i)">Preview</div>
+                        </td>
+
+                    </tr>
+                </table>
+            </ng-container>
+
+        </ng-container>
+
+
+
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">
+    <button class="btn btn-secondary" [mat-dialog-close]>Cancel</button>
+</mat-dialog-actions>

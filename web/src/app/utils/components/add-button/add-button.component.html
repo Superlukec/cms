@@ -1,0 +1,144 @@
+<div class="p-2">
+
+    <div class="text-center my-2">
+        <h4>Button<br>
+            <small class="text-muted">Create your button</small>
+        </h4>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md">
+            <div class="d-flex h-100 align-items-center justify-content-center">
+                
+                <div class="text-center">
+                    <div class="text-muted mb-2">Preview</div>
+
+                    <div class="btn" [ngClass]="{ 
+                        'btn-primary' : button_style == 'btn-primary', 
+                        'btn-outline-primary' : button_style == 'btn-outline-primary', 
+                        'btn-secondary' : button_style == 'btn-secondary', 
+                        'btn-outline-secondary' : button_style == 'btn-outline-secondary', 
+                        'btn-danger' : button_style == 'btn-danger',
+                        'btn-outline-danger' : button_style == 'btn-outline-danger', 
+                        'btn-success' : button_style == 'btn-success',
+                        'btn-outline-success' : button_style == 'btn-outline-success',
+                        'btn-lg' : button_size == 'btn-lg',
+                        'btn-sm' : button_size == 'btn-sm'
+                     }">
+                     
+                     <ng-container *ngIf="button_icon">
+                        <i class="{{ button_icon }}"></i>
+                     </ng-container>
+
+                     {{ button_text }}
+                    </div>           
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="col-12 col-md-8">
+
+
+            <div class="row">
+
+                
+    
+                <div class="col-12 col-md-6">
+    
+                    <div class="form-group mt-2 mb-0">
+                        <label style="font-size: .8em;" class="text-muted mb-0">Button text</label>
+                        <input type="text" class="form-control form-control-sm mb-0" [(ngModel)]="button_text" (change)="dataChange()" />
+                    </div>
+        
+                    <div class="form-group mt-2 mb-0">
+                        <label style="font-size: .8em;" class="text-muted mb-0">Button style</label>
+                        <select class="form-control  form-control-sm" [(ngModel)]="button_style" (change)="dataChange()">
+                            <option value="btn-primary">Primary</option>
+                            <option value="btn-outline-primary">Primary (outline)</option>
+                            <option value="btn-secondary">Secondary</option>
+                            <option value="btn-outline-secondary">Secondary (outline)</option>
+                            <option value="btn-danger">Danger</option>
+                            <option value="btn-outline-danger">Danger (outline)</option>
+                            <option value="btn-success">Success</option>                    
+                            <option value="btn-outline-success">Success (outline)</option>                    
+                        </select>
+                    </div>
+        
+                    
+                    <div class="form-group mt-2 mb-0">
+                        <label style="font-size: .8em;" class="text-muted mb-0">Full width</label>
+                        <select class="form-control  form-control-sm" [(ngModel)]="button_fullwidth" (change)="dataChange()">
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>                                   
+                        </select>
+                    </div>
+                    
+        
+                    <div class="form-group mt-2 mb-0">
+                        <label style="font-size: .8em;" class="text-muted mb-0">Button size</label>
+                        <select class="form-control  form-control-sm" [(ngModel)]="button_size" (change)="dataChange()">                   
+                            <option value="btn-lg">Large</option> 
+                            <option value="">Normal</option>
+                            <option value="btn-sm">Small</option>                                   
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-2 mb-0">
+                        <label style="font-size: .8em;" class="text-muted mb-0">Button icon</label>
+                        <input type="text" class="form-control form-control-sm mb-0" [(ngModel)]="button_icon" (change)="dataChange()" />
+
+                        <div class="text-primary pointer" style="font-size: .8em; margin-top: 5px;" (click)="chooseIcon()">Select icon</div>
+                    </div>
+    
+                </div>
+
+                <div class="col-12 col-md-6">
+                    
+                    <div class="form-group mt-2 mb-0">
+                        <label style="font-size: .8em;" class="text-muted mb-0">Button action</label>
+                        <select class="form-control  form-control-sm" [(ngModel)]="button_action" (change)="dataChange()">                   
+                            <option value="link">Link</option> 
+                            <option value="form">Show form in dialog</option>
+                        </select>
+                    </div>
+
+                    <ng-container *ngIf="button_action == 'link'">
+
+                        <div class="form-group mt-2 mb-0">
+                            <label style="font-size: .8em;" class="text-muted mb-0">Button link</label>
+                            <input type="text" class="form-control form-control-sm mb-0" [(ngModel)]="button_link" (change)="dataChange()" />
+                        </div>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="button_action == 'form'">
+
+                        <ng-container *ngIf="!loading">
+                            <div class="form-group mt-2 mb-0">
+                                <label style="font-size: .8em;" class="text-muted mb-0">Select form</label>
+                                <ng-container *ngIf="forms.length > 0">
+                                    <select class="form-control form-control-sm" [(ngModel)]="button_actionvalue" [ngModelOptions]="{standalone: true}" (change)="dataChange()">
+                                        <option *ngFor="let f of forms" value="{{ f._id }}">{{ f.name }}</option>
+                                    </select>
+                                </ng-container>
+                                <ng-container *ngIf="forms.length == 0">
+                                    <select class="form-control form-control-sm">
+                                        <option>-- No forms available --</option>
+                                    </select>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+
+                    </ng-container>
+
+                </div>
+
+            </div>
+          
+
+        </div>
+    </div>
+
+</div>

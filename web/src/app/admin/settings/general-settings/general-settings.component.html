@@ -1,0 +1,147 @@
+<ng-container *ngIf="!loading">
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" class="h-100 d-flex flex-column">
+        <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-4">
+
+
+            <div class="d-flex text-muted">
+            </div>
+
+            <div>
+                <button class="btn btn-primary ml-2" type="submit">Update</button>
+            </div>
+
+
+        </div>
+
+
+        <div class="d-flex h-100">
+            <div class="col h-100" style="overflow-y: auto;">
+
+                <div class="container h-100">
+
+
+                    <div class="p-4">
+
+                        <h2>Settings</h2>
+
+                        <h4 class="mt-4 mb-3 text-muted">General</h4>
+
+                        <div class="w-50">
+                            <div class="form-group my-3">
+                                <label>Site title <br><small class="text-muted">Main title for your
+                                        website</small></label>
+                                <input class="form-control" formControlName="title" />
+                            </div>
+                            <div class="form-group my-3">
+                                <label>Domain name <br><small class="text-muted">Be careful changing this parameter,
+                                        your website might not work</small></label>
+                                <input class="form-control" formControlName="domain" />
+                            </div>
+                            <div class="form-group my-3">
+                                <label>Visible to public <br><small class="text-muted">Website is visible to
+                                        everyone</small></label>
+                                <select class="form-control w-25" formControlName="public">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group my-3">
+                                <label>Enable search engine indexing <br><small class="text-muted">google.com, bing.com,
+                                        yahoo.com</small></label>
+                                <select class="form-control w-25" formControlName="seo">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group my-3">
+                                <label>Sitemap enabled <br><small class="text-muted">Sitemaps for search engines</small></label>
+                                
+                                <div class="d-flex">
+                                    <select class="form-control w-25" formControlName="sitemap_enabled">
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                    <div class="ml-2 w-75">
+                                        <input class="form-control" value="{{ sitemap_uri }}" *ngIf="f.sitemap_enabled.value == 'true'" disabled />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 class="mt-4 mb-3 text-muted">Favicon</h4>
+                            <div class="form-group my-3">
+                                <label>Upload favicon <br><small class="text-muted">Upload image for the favicon usage, for the best result image should be square.</small></label>
+
+                                <div class="d-flex align-items-center">
+                                   
+                                    
+                                    <div style="background-image: url(/assets/sample-favicon.png); width: 137px; height: 67px; padding-top: 4px;">
+                                    
+                                        <div style="background: white; width: 24px; height: 24px; margin-left: 12px;" *ngIf="faviconUrl">
+
+                                            <img src="{{ faviconUrl }}" style="width: 24px; height: 24px;" />
+
+                                        </div>
+
+                                    </div>                                        
+                                   
+
+                                    <div class="ml-3">
+                                        <div class="d-flex align-items-center">
+
+                                            <ng-container *ngIf="faviconUrl">
+                                                <div>
+                                                    <div class="btn btn-sm btn-outline-danger mt-2" (click)="deleteFavicon()"><i class="far fa-trash-alt"></i></div>
+                                                </div>
+
+                                                <div class="mx-2">
+                                                    or
+                                                </div>
+                                            </ng-container>
+
+                                            <app-upload-image (data)="onFaviconUpload($event)" [multiple]="true" [small]="true" [favicon]="true"></app-upload-image>
+
+                                        </div>
+
+                                        
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <h4 class="mt-4 mb-3 text-muted">Multilanguage</h4>
+
+                            <mat-checkbox formControlName="multilanguage">Activate multilanguage</mat-checkbox>
+
+                            <table class="table bg-white" *ngIf="f.multilanguage.value">
+                                <tr>
+                                    <th style="width: 40px;">Primary</th>
+                                    <th>Language</th>
+                                    <th>Prefix</th>
+                                </tr>
+                                <tr *ngFor="let lang of languages">
+                                    <td>
+                                        <div class="pointer" (click)="setMainLanguage(lang.prefix)">
+                                            <span *ngIf="lang.main"><i class="fas fa-star"></i></span>
+                                            <span *ngIf="!lang.main"><i class="far fa-star"></i></span>
+                                        </div>
+                                    </td>
+                                    <td>{{ lang.language }}</td>
+                                    <td>{{ lang.prefix }}</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <ng-container *ngIf="f.multilanguage.value">
+                            <div class="btn btn-primary btn-sm mt-2 pointer" (click)="addLanguage()">Add language
+                            </div>
+                        </ng-container>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-container>

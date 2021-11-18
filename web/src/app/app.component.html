@@ -1,0 +1,56 @@
+<div class="h-100">
+
+    <div class="w-100 text-center h-100 pos-abs-top-50" [ngClass]="{ 'hide-page' : !hideSsr }">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    <div class="d-flex h-100 " [ngClass]="{ 'admin-bg' : (isAdminPage), 'hide-page' : hideSsr }">
+
+        <div class="d-none">
+            <!-- quick fix -->
+            <app-ckeditor></app-ckeditor>
+        </div>
+
+        <app-admin-menu *ngIf="isAdminPage"></app-admin-menu>
+
+        <div class="main-content w-100" [ngClass]="{ 'h-100' : (isAdminPage) }" style="min-height: 100%;">
+
+            <div class="d-flex flex-column" [ngClass]="{ 'h-100' : (isAdminPage || isLogin) }" style="min-height: 100%;">
+
+                <!-- Header - component -->
+                <app-header [admin]="isAdminPage" [html]="headerHtml" [show]="!isLogin"></app-header>
+
+                <ng-container *ngIf="((headerHtml && footerHtml && !isLogin) || isAdminPage || isLogin); else elseBlock">
+                    <!-- Main - component -->
+                    <div class="h-100" [ngClass]="{ 'overflow-y' : (isAdminPage) }">
+                        <!-- @todo style="min-height: 600px;">-->
+                        <router-outlet></router-outlet>
+                    </div>
+                </ng-container>
+                <ng-template #elseBlock>
+                    <div class="w-100 text-center pos-abs-top-50">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </ng-template>
+
+                
+
+                <app-chatbot-live [chatbots]="chatbots" [chatSettings]="chatSettings" [chatText]="chatText"></app-chatbot-live>
+
+                <!-- Footer - component -->
+                <app-footer class="mt-auto" [html]="footerHtml" [show]="!isLogin" *ngIf="!isAdminPage"></app-footer>
+
+                <ng-container *ngIf="cookiesEnabled">
+                    <app-show-site-cookies [cookie]="cookiesInfo"></app-show-site-cookies>
+                </ng-container>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

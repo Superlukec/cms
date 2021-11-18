@@ -1,0 +1,241 @@
+<ng-container *ngIf="!loading">
+    <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-4">
+
+        <div class="d-flex text-muted">
+
+        </div>
+
+        <div>
+            <button class="btn btn-primary ml-2" (click)="saveMenus()">Save</button>
+        </div>
+
+
+    </div>
+
+    <div class="py-4">
+        <div class="container">
+
+            <div class="row mb-4">
+                <div class="col">
+                    <ul class="nav nav-tabs border-bottom-0">
+                        <li class="nav-item" *ngFor="let menu of menus">
+                            <div class="nav-link active text-blue pointer" [ngClass]="{ 'active' : (menu.slug == currentMenuSelected) }" (click)="changeMenu(menu)">
+                                <div class="d-flex justify-content-between">
+                                    {{ menu.slug }}
+                                    <div *ngIf="(menu.slug == currentMenuSelected)" (click)="deleteMenu(menu._id)" class="ml-4">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="nav-link text-blue pointer" [ngClass]="{ 'active' : ('new' == currentMenuSelected) }" (click)="newMenu()" tabindex="-1" aria-disabled="true">
+                                <i class="fas fa-plus"></i>&nbsp; Add menu
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col">
+
+                    <ng-container *ngIf="currentMenuSelected != 'new'">
+
+                        <div class="d-flex align-items-center">
+                            <h2>{{ currentMenuName }} <small class="text-muted">({{ currentMenuSelected }})</small></h2>
+                            <div class="ml-4" *ngIf="multilanguage">
+                                <select class="form-control form-control-sm" [(ngModel)]="selectedLang" [ngModelOptions]="{standalone: true}" (change)="onChangeLang($event.target.value)">
+                                    <option *ngFor="let lang of availableLanguages" value="{{ lang.prefix }}">{{ lang.language }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col">
+                                <div class="mb-2">
+                                    <div class="btn btn-primary btn-sm" (click)="addPageToTheMenu()">Add page</div>
+
+                                    <div class="btn btn-outline-success btn-sm ml-2" (click)="addCategoryToTheMenu(0)">Add category</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+
+                            <!-- 1st level -->
+                            <div class="col" cdkDropList (cdkDropListDropped)="drop($event)">
+                                <div class="card mb-2" *ngIf="shownMenuList.length == 0">
+                                    <div class="card-body">
+                                        No page added to this menu.
+                                    </div>
+                                </div>
+
+                                <div class="card mb-2" [ngClass]="{ 'shadow-sm border border-info' : (page.selected) }" *ngFor="let page of shownMenuList; let i = index" cdkDrag (click)="selectMenu(page)">
+
+                                    <div class="card-body">
+
+                                        <div class="d-flex w-100">
+                                            <div class="mr-3">
+                                                <i class="fas fa-arrows-alt pointer" cdkDragHandle></i>
+                                            </div>
+
+
+                                            <ng-container *ngIf="page.category">
+                                                <div>
+                                                    {{ page.category }}
+                                                    <div class="text-muted text-uppercase" style="font-size: .7em">Category</div>
+                                                </div>
+                                            </ng-container>
+                                            <ng-container *ngIf="!page.category">
+                                                {{ page.title }}
+                                            </ng-container>
+
+
+                                            <ng-container *ngIf="page.homepage">
+                                                <span class="text-muted">(homepage)</span>
+                                            </ng-container>
+
+                                            <div class="ml-auto d-flex align-items-center">
+
+                                                <ng-container *ngIf="page.category">
+                                                    <div class="menu-action-button mr-3" title="Edit name" (click)="editCategoryName(i, page.category, 0)">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </div>
+                                                </ng-container>
+
+                                                <ng-container *ngIf="!page.category">
+                                                    <div class="menu-action-button mr-3" [ngClass]="{'active': page.show_links_menu_children}" title="Show children" (click)="showChildren(page._id)" *ngIf="page.children && page.children.length > 0">
+                                                        <i class="fas fa-users"></i>
+                                                    </div>
+                                                </ng-container>
+
+                                                <div class="menu-action-button" title="Delete" (click)="removeFromMenuList(page._id)">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 2nd level -->
+                            <div class="col mt-1" cdkDropList (cdkDropListDropped)="dropChild($event)">
+                                <ng-container *ngIf="selectedMenu">
+
+                                    <div class="mb-2">
+                                        <div class="btn btn-primary btn-sm" (click)="addChild()">Add child</div>
+
+                                        <div class="btn btn-outline-success btn-sm ml-2" (click)="addCategoryToTheMenu(1)">Add category</div>
+                                    </div>
+
+
+                                    <div class="card  bg-light mb-2 py-2" [ngClass]="{ 'shadow-sm border border-info' : (page.selected) }" *ngFor="let page of selectedMenu.children; let j = index" cdkDrag (click)="selectChild(page)">
+
+                                        <div class="card-body py-2" *ngIf="page">
+
+                                            <div class="d-flex w-100">
+                                                <div class="mr-3">
+                                                    <i class="fas fa-arrows-alt pointer"></i>
+                                                </div>
+
+                                                <ng-container *ngIf="page.category">
+                                                    <div>
+                                                        {{ page.category }}
+                                                        <div class="text-muted text-uppercase" style="font-size: .7em">Category</div>
+                                                    </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="!page.category">
+                                                    {{ page.title }}
+                                                </ng-container>
+
+
+                                                <ng-container *ngIf="page.homepage">
+                                                    <span class="text-muted">(homepage)</span>
+                                                </ng-container>
+
+                                                <div class="ml-auto d-flex align-items-center">
+
+                                                    <ng-container *ngIf="page.category">
+                                                        <div class="menu-action-button mr-3" title="Edit name" (click)="editCategoryName(i, page.category, 1)">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </div>
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="!page.category">
+                                                        <div class="menu-action-button mr-3" title="Show children" [ngClass]="{'active': page.show_links_menu_children}" (click)="showChildren(page._id, 1)" *ngIf="page.children && page.children.length > 0">
+                                                            <i class="fas fa-users"></i>
+                                                        </div>
+                                                    </ng-container>
+
+                                                    <div class="menu-action-button" title="Delete" (click)="removeChildFromMenuList(page._id, 1)">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </ng-container>
+                            </div>
+
+                            <!-- 3rd level -->
+                            <div class="col mt-5">
+                                <ng-container *ngIf="selectedChild">
+
+                                    <div class="mb-2">
+                                        <div class="btn btn-primary btn-sm mb-2" (click)="addThirdLevelChild()">Add child</div>
+                                    </div>
+
+                                    <div class="card bg-light mb-2 py-2" *ngFor="let page of selectedChild.children; let k = index">
+                                        <div class="card-body py-2" *ngIf="page && page.title">
+
+                                            <div class="d-flex w-100">
+                                                <div class="mr-3">
+                                                    <i class="fas fa-arrows-alt pointer"></i>
+                                                </div>
+                                                {{ page.title }}
+                                                <ng-container *ngIf="page.homepage">
+                                                    <span class="text-muted">(homepage)</span>
+                                                </ng-container>
+                                                <div class="ml-auto d-flex align-items-center">
+                                                    <div class="menu-action-button" title="Delete" (click)="removeChildFromMenuList(page._id, 2)">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </ng-container>
+                            </div>
+
+                        </div>
+
+                    </ng-container>
+                    <ng-container *ngIf="currentMenuSelected == 'new'">
+                        <!-- new menu -->
+                        <h2>{{ currentMenuName }}</h2>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Menu name" [(ngModel)]="newMenuName" (keyup.enter)="addNewMenu(newMenuName)" />
+                                </div>
+
+                                <div class="btn btn-primary btn-sm" (click)="addNewMenu(newMenuName)">Add menu</div>
+                            </div>
+                        </div>
+
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

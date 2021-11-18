@@ -1,0 +1,12 @@
+<ng-container *ngIf="!page">
+    <app-general-settings></app-general-settings>
+</ng-container>
+<ng-container *ngIf="page == 'images'">
+    <app-image-settings></app-image-settings>
+</ng-container>
+<ng-container *ngIf="page == 'cookie'">
+    <app-cookie-settings></app-cookie-settings>
+</ng-container>
+<ng-container *ngIf="page == 'translations'">
+    <app-translations></app-translations>
+</ng-container>

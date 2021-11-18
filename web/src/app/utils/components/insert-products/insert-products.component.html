@@ -1,0 +1,131 @@
+<div class="p-5" *ngIf="!loading">
+    <div class="d-flex justify-content-center">
+        <div class="w-50">
+
+            <small>Product brand</small>
+           
+            <!--<select class="form-control form-control-sm" [(ngModel)]="productSelect" [ngModelOptions]="{standalone: true}" (change)="selectProduct(productSelect)">
+                <option value="false">--</option>                
+                <option *ngFor="let b of brands" value="{{ b._id }}">{{ b.name }}</option>
+            </select>-->
+
+            <div class="border p-2 mb-3" style="max-height: 300px; overflow-y: auto;">
+                <div *ngFor="let b of brands">
+
+                    <mat-checkbox [(ngModel)]="b.selected" [ngModelOptions]="{standalone: true}" (change)="selectBrandCheckbox(b.selected, b._id)">{{ b.name }}</mat-checkbox>
+
+                </div>
+            </div>
+
+
+            <div class="mt-2">
+                <small>Limit number of products</small>
+                <input style="width: initial;" type="number" class="form-control form-control-sm" [(ngModel)]="product_limit" [ngModelOptions]="{standalone: true}" (ngModelChange)="limitChange(product_limit)" />
+            </div>
+
+            <div class="mt-2">
+                <small>Show product excerpt</small>
+                <select style="width: initial;" class="form-control form-control-sm" [(ngModel)]="show_excert" [ngModelOptions]="{standalone: true}" (change)="dataChange()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+
+            <div class="mt-2">
+                <small>Number of products per column</small>
+                <!--<input style="width: initial;" type="number" class="form-control form-control-sm" [(ngModel)]="tab.products_per_column" [ngModelOptions]="{standalone: true}" (ngModelChange)="limitChange(i, tab.limit)" />-->
+                <select style="width: initial;" class="form-control form-control-sm" [(ngModel)]="products_per_column" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataChange()">
+                    <option value="0">Default</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+
+
+            <div class="mt-2">
+                <small>Show filter</small>
+                <select class="form-control form-control-sm" [(ngModel)]="showFilter" [ngModelOptions]="{standalone: true}" (change)="dataChange()">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+
+
+            <ng-container *ngIf="showFilter == true || showFilter == 'true'">
+                <div class="my-2">
+                    <mat-checkbox [(ngModel)]="customFilter" [ngModelOptions]="{standalone: true}" (change)="changeFilter()">Custom filter</mat-checkbox>
+                </div>
+
+                <ng-container *ngIf="customFilter">
+                    
+                    <div class="border p-2 my-3">
+
+                        <ng-container *ngIf="filterData.length == 0">
+
+                            No filter ...
+
+                        </ng-container>
+
+                        <ng-container *ngIf="filterData.length > 0">
+
+                            <ul class="list-unstyled properties-filter">
+
+                                <li *ngFor="let f of filterData; let i = index">
+
+                                    <ng-container *ngIf="!f.is_property">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="font-weight-bold">{{ f.category.name }} (cat)</div>
+                                                <ul>
+                                                    <li *ngFor="let p of f.properties">{{ p.name }}</li>
+                                                </ul>
+                                            </div>
+                                            <div class="ml-auto">
+                                                
+                                                <div class="d-flex">
+                                                    <input type="text" placeholder="{{ i }}" class="form-control form-control-sm" style="width: 40px" />
+                                                    <div class="btn btn-sm btn-outline-danger ml-2" (click)="removeElement(i)">
+                                                        <i class="fas fa-minus-circle"></i>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>     
+                                    </ng-container>
+
+                                    <ng-container *ngIf="f.is_property">
+
+                                        <div class="d-flex align-items-center">
+                                            <div>{{ f.property.name }} (prop)</div>
+                                            <div class="ml-auto">
+            
+                                                <div class="d-flex">
+                                                    <input type="text" placeholder="{{ i }}" class="form-control form-control-sm" style="width: 40px" />
+                                                    <div class="btn btn-sm btn-outline-danger ml-2" (click)="removeElement(i)">
+                                                        <i class="fas fa-minus-circle"></i>
+                                                    </div>
+                                                </div>
+            
+                                            </div>
+                                        </div>
+
+                                    </ng-container>
+
+                                </li>
+
+                            </ul>
+
+                        </ng-container>
+                    </div>
+
+
+                    <div (click)="addCategory()" class="d-block btn btn-outline-primary btn-sm">Add category / property</div>
+                </ng-container>
+
+            </ng-container>
+        </div>        
+    </div>
+    
+</div>

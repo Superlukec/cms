@@ -1,0 +1,132 @@
+<form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate>
+    <h2 mat-dialog-title>Working hours</h2>
+    <mat-dialog-content>
+
+        
+        <ng-container *ngIf="!multi">
+            <div class="d-flex align-items-center">
+
+                <table class="table table-sm table-borderless">
+
+                    <tr>
+                        <td colspan="3" class="font-italic" style="font-size: 0.8rem;">From</td>
+                        <td colspan="3" class="font-italic" style="font-size: 0.8rem;">To</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <select class="form-control form-control-sm" (change)="changeTime('fromHour')" formControlName="fromHour" [ngClass]="{ 'border-danger': errors['fromHour'] }">
+                                <option *ngFor="let h of hours; let i = index;" value="{{ i }}">                                    
+                                    {{ i | leadingZero }}
+                                </option>                                
+                            </select>
+                        </td>
+
+                        <td class="text-center">:</td>
+
+                        <td>
+                            <select class="form-control form-control-sm" formControlName="fromMinutes">
+                                <option *ngFor="let h of minutes; let i = index;" value="{{ i }}">
+                                    {{ i | leadingZero }}                               
+                                </option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <select class="form-control form-control-sm" (change)="changeTime('toHour')" formControlName="toHour" [ngClass]="{ 'border-danger': errors['toHour'] }">
+                                <option *ngFor="let h of hours; let i = index;" value="{{ i }}">
+                                    {{ i | leadingZero }}                           
+                                </option>
+                            </select>
+                        </td>
+    
+                        <td class="text-center">:</td>
+    
+                        <td>
+                            <select class="form-control form-control-sm" formControlName="toMinutes">
+                                <option *ngFor="let h of minutes; let i = index;" value="{{ i }}">
+                                    {{ i | leadingZero }}                                 
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="multi">
+
+            <table class="table table-sm table-borderless">
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="3" class="font-italic" style="font-size: 0.8rem;">From</td>
+                        <td colspan="3" class="font-italic" style="font-size: 0.8rem;">To</td>                        
+                        <td class="font-italic text-center" style="font-size: 0.8rem;">Closed</td>
+                    </tr>
+
+                <ng-container *ngFor="let w of weekDays; let i = index;">                    
+
+                    <tr>
+                        <td class="text-muted">{{ w.label }}</td>
+
+                        <td>
+                            <select class="form-control form-control-sm" (change)="changeTime('fromHour', i)" [(ngModel)]="w.fromHour" [ngModelOptions]="{standalone: true}" [ngClass]="{ 'border-danger': w.error }">
+                                <option *ngFor="let h of hours; let i = index;" value="{{ i }}">
+                                    {{ i | leadingZero }}                           
+                                </option>
+                            </select>
+                        </td>
+    
+                        <td class="text-center">:</td>
+    
+                        <td>
+                            <select class="form-control form-control-sm" [(ngModel)]="w.fromMinutes" [ngModelOptions]="{standalone: true}">
+                                <option *ngFor="let h of minutes; let i = index;" value="{{ i }}">
+                                    {{ i | leadingZero }}                                 
+                                </option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <select class="form-control form-control-sm" (change)="changeTime('toHour', i)" [(ngModel)]="w.toHour" [ngModelOptions]="{standalone: true}" [ngClass]="{ 'border-danger': w.error }">
+                                <option *ngFor="let h of hours; let i = index;" value="{{ i }}">
+                                    {{ i | leadingZero }}                           
+                                </option>
+                            </select>
+                        </td>
+    
+                        <td class="text-center">:</td>
+    
+                        <td>
+                            <select class="form-control form-control-sm" [(ngModel)]="w.toMinutes" [ngModelOptions]="{standalone: true}">
+                                <option *ngFor="let h of minutes; let i = index;" value="{{ i }}">
+                                    {{ i | leadingZero }}                                 
+                                </option>
+                            </select>
+                        </td>
+
+                        <td class="text-center" >
+                            <input type="checkbox" [(ngModel)]="w.closed" [ngModelOptions]="{standalone: true}" />
+                        </td>
+                    </tr>
+
+                </ng-container>
+            </table>
+
+        </ng-container>
+
+        
+
+
+        <!--
+        <div class="form-group">
+            <label class="center-block mb-0">Property name:</label>
+            <input type="text" class="form-control form-control-sm" formControlName="name" />
+        </div>-->
+    </mat-dialog-content>
+    <mat-dialog-actions class="mb-1">
+        <button class="btn btn-primary mr-2" type="submit">Save</button>
+        <button class="btn btn-secondary" [mat-dialog-close]="false">Cancel</button>
+    </mat-dialog-actions>
+</form>

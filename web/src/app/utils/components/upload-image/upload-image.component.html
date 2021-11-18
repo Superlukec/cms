@@ -1,0 +1,38 @@
+<ng-container *ngIf="!imagePath || multiple">  
+
+    <div class="py-4" [ngClass]="{'d-flex justify-content-center': !small}">
+        <div class="upload-form d-flex justify-content-center flex-column">
+            <div>
+                <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+            </div>
+
+            <div>
+                <mat-progress-bar class="aligner-item mt-2" [color]="color" [mode]="mode" [value]="value">
+                </mat-progress-bar>
+            </div>
+
+            <div class="btn btn-sm btn-outline-primary my-2" (click)="chooseImage()">Choose existing</div>
+        </div>
+    </div>        
+
+</ng-container>
+
+<ng-container *ngIf="imagePath && !multiple">
+
+    <div class="inner-container" [ngClass]="{'my-2': small}">
+        <img [src]="imagePath" class="img-fluid" />
+        <div class="overlay d-flex justify-content-center align-items-center">
+            <div class="d-flex large-fonts-button">
+                <button type="button" class="btn btn-outline-light" (click)="deleteImage()" [ngClass]="{'btn-lg': !small}">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+                <!--
+                <button type="button" class="btn btn-outline-light ml-4" [ngClass]="{'btn-lg': !small}">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+                -->
+            </div>
+        </div>
+    </div>
+   
+</ng-container>

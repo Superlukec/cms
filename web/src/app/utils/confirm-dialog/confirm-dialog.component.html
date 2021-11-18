@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content class="mb-2">
+  <!--{{ data.text }}-->
+  <div [innerHTML]="data.text | sanitizeHtml"></div>
+
+  <div *ngIf="data.note" class="text-muted" style="font-size: 0.9em">
+    Note: {{ data.note }}
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">
+  <button class="btn btn-primary mr-2" [mat-dialog-close]="false" *ngIf="data.leftButton">{{ data.leftButton }}</button>  
+  <button class="btn btn-outline-secondary" [mat-dialog-close]="true" *ngIf="data.rightButton">{{ data.rightButton }}</button>
+</mat-dialog-actions>

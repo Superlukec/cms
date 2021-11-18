@@ -1,0 +1,7 @@
+@import "bootstrap";
+
+label {
+    @extend .text-muted;
+
+    font-size: .9rem;
+}

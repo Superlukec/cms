@@ -1,0 +1,55 @@
+<ng-container *ngIf="!loading">
+
+
+    <div class="d-flex h-100">
+        <div class="col h-100" style="overflow-y: auto;">
+
+            <div class="container h-100">
+
+
+                <div class="p-4">
+
+                    <h2>Image sizes</h2>
+
+                    <div class="mt-4 mb-3 text-muted">Image sizes for image upload directive</div>
+
+                    <table class="table bg-white">
+                        <tr>
+                            <th>Name</th>
+                            <th>Width</th>
+                            <th>Height</th>
+                            <th>Algorithm</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr *ngFor="let size of imageSize; let i = index">
+                            <td>{{ size.name }}</td>
+                            <td>{{ size.width }}</td>
+                            <td>{{ (size.height) ? size.height : '/'  }}</td>
+                            <td>{{ size.algorithm }}</td>
+                            <td>
+                                <ng-container>
+                                    &nbsp;
+                                </ng-container>
+                                <div class="btn btn-outline-danger btn-sm" *ngIf="!size.default" (click)="deleteImageSize(i)">
+                                    <i class="fas fa-trash-alt"></i>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                   
+                    <div class="btn btn-sm btn-outline-primary" (click)="addImageSize()">Add size</div>
+
+
+                    <h2 class="mt-4">Re-generate sizes</h2>
+
+                    <div class="mt-4 mb-3 text-muted">This will re-generate all sizes of the all image collection</div>
+
+                    <div class="btn btn-outline-danger" (click)="regenerateImageSize()">Re-generate</div>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</ng-container>

@@ -1,0 +1,277 @@
+<div class="p-2">
+
+    <div class="text-center my-2">
+        <h4>Gallery<br>
+            <small class="text-muted">Add images and select the layout</small>
+        </h4>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        
+
+        <div class="row w-100">
+            <div [ngClass]="{ 'col-12 col-md-8': !small, 'col-12': small }">
+                <div *ngIf="images.length > 0">
+                    <div class="row">
+                        <div [ngClass]="{ 'col-12 col-md-6': !small, 'col-12': small }" *ngFor="let f of images; let i = index;">       
+
+                            <ng-container *ngIf="f">
+
+                                <input type="text" class="form-control form-control-sm my-2" style="width: 50px;" [(ngModel)]="f.sort" [ngModelOptions]="{standalone: true}" (change)="changeSort(i, f.sort)" />
+
+                                <div class="p-2 border shadow-sm  mb-2">            
+                                    <div class="bg-white border">
+                                        <ng-container *ngIf="f.icon">
+                                            <div style="height: 130px" class="d-flex align-items-center justify-content-center text-blue inner-container">
+                                                <span class="{{ f.icon }}" style="font-size: 3rem;"></span>
+
+
+                                                <div class="overlay d-flex justify-content-center align-items-center">
+                                                    <div class="d-flex large-fonts-button">                                           
+                                                        <button type="button" class="btn btn-outline-light"
+                                                            (click)="delete(i)">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-light ml-2"
+                                                            (click)="edit(i)">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </button>
+                                                    </div>
+                                                </div> 
+                                            </div>
+
+                                            
+
+                                        </ng-container>
+                                        <ng-container *ngIf="f.image">
+                                            <div [ngStyle]="{background: 'url(' + _imageService.getImageSrc('medium', f.image) + ')', width: '100%', height: '130px', backgroundSize: 'cover', backgroundPosition: 'center center', backgroundRepeat: 'no-repeat' }"
+                                                class="inner-container">
+                                                <div class="overlay d-flex justify-content-center align-items-center">
+                                                    <div class="d-flex large-fonts-button">                                           
+                                                        <button type="button" class="btn btn-outline-light"
+                                                            (click)="delete(i)">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                        <!--<button type="button" class="btn btn-outline-light ml-2"
+                                                            (click)="edit(i)">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </button>-->
+                                                    </div>
+                                                </div>                                    
+                                            </div>        
+                                        </ng-container>         
+                                        
+                                        <ng-container *ngIf="!f.icon && !f.image">
+                                            <div [ngStyle]="{background: '#eee', width: '100%', height: '130px', backgroundSize: 'cover', backgroundPosition: 'center center', backgroundRepeat: 'no-repeat' }"
+                                                class="inner-container">
+                                                <div class="overlay d-flex justify-content-center align-items-center">
+                                                    <div class="d-flex large-fonts-button">                                           
+                                                        <button type="button" class="btn btn-outline-light"
+                                                            (click)="delete(i)">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>                                                   
+                                                    </div>
+                                                </div>                                    
+                                            </div>      
+                                        </ng-container>
+                                    </div>
+
+
+                                    <ng-container *ngIf="!f.image">
+                                        <div class="form-group mt-2 mb-0">
+                                            <label style="font-size: .8em;" class="text-muted mb-0">Icon size</label>
+                                            <input type="text" class="form-control form-control-sm mb-0" placeholder="Default size" [(ngModel)]="f.icon_size" (change)="dataChange()" />
+                                        </div>
+
+                                    </ng-container>
+
+                                    <ng-container *ngIf="f.image">
+                                        <div class="form-group mt-2 mb-0">
+                                            <label style="font-size: .8em;" class="text-muted mb-0">Image placement</label>
+                                            <select class="form-control  form-control-sm" [(ngModel)]="f.is_cover" (change)="dataChange()">
+                                                <option value="true">Cover</option>
+                                                <option value="false">Contain</option>
+                                            </select>
+                                        </div>
+                                    </ng-container>
+
+                                    <div class="form-group mt-2 mb-0">
+                                        <label style="font-size: .8em;" class="text-muted mb-0">Image text</label>
+                                        <input type="text" class="form-control form-control-sm mb-0" [(ngModel)]="f.text" (change)="dataChange()" />
+                                    </div>
+
+                                    <div class="form-group mt-2 mb-0">
+                                        <label style="font-size: .8em;" class="text-muted mb-0">Image link</label>
+                                        <input type="text" class="form-control form-control-sm mb-0"  [(ngModel)]="f.link" (change)="dataChange()" />
+                                    </div>
+
+                                    <div class="form-group mt-2 mb-0">
+                                        <label style="font-size: .8em;" class="text-muted mb-0">Description</label>
+                                        <div class="border">
+                                            <app-ckeditor
+                                                [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'fontColor', 'alignment', '|', 'bulletedList', 'numberedList', '|', 'insertTable','mediaEmbed', '|', 'undo', 'redo' ] }"
+                                                [data]="f.description" (output)="onCkEditorValue(i, $event)"></app-ckeditor>
+                                        </div>
+                                    </div>
+                                </div>         
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-5">
+                    <div class="btn btn-sm btn-outline-success" (click)="chooseIcon()">Choose icon</div>
+                </div>
+
+                <div class="my-2 text-center" style="padding-top: 5px;">
+                    <hr />
+        
+                    <div class="d-flex justify-content-center align-items-center w-100">
+                        <div class="bg-white text-muted" style="margin-top: -30px; width: 50px;">or</div>
+                    </div>
+                </div>
+
+                <app-upload-image (data)="onImageUpload($event)" [multiple]="true" [small]="true">
+                </app-upload-image>
+
+               
+
+            </div>
+            <div class="col-12 col-lg-4">
+
+                <div class="row">
+                    <div class="col">
+
+                        <div class="form-group  mt-2">
+
+                            <small>Gallery type</small>
+
+                            <select class="form-control  form-control-sm" [(ngModel)]="gallery_type" (change)="dataChange()">
+                                <option value="normal">Normal</option>
+                                <option value="slideshow">Slideshow</option>
+                                <option value="mosaic">Mosaic</option>
+                            </select>
+
+                            <ng-container *ngIf="gallery_type == 'mosaic'">
+                                <div class="my-1 text-muted" style="font-size: .8em;">
+                                    <i>Icons will be ignored. Mosaic-mode only supports images.</i>
+                                </div>
+                            </ng-container>
+
+                        </div>
+
+                        <div class="form-group" *ngIf="gallery_type == 'normal'">
+                            <small>Number of columns</small>
+
+                            <select class="form-control  form-control-sm" [(ngModel)]="columns" (change)="dataChange()">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option value="0">all in one row</option>
+                            </select>
+
+                        </div>
+
+                        <ng-container *ngIf="gallery_type == 'slideshow'">
+
+                            <div class="form-group">
+
+                                <small>Number of columns in slideshow</small>
+                                <select class="form-control  form-control-sm" [(ngModel)]="columns_per_slide" (change)="dataChange()">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <small>Show indicator</small>
+                                <select class="form-control  form-control-sm" [(ngModel)]="show_slideshow_indicator" (change)="dataChange()">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>                                    
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <small>Indicator color</small>
+                                <!--
+                                <select class="form-control  form-control-sm" [(ngModel)]="indicator_color" (change)="dataChange()">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>                                    
+                                </select>-->
+                                <div class="d-flex">
+                                    <div [style.background]="indicator_color"
+                                        style="width: 25px; height: 25px; border: 1px solid #333; cursor: pointer;"
+                                        [cpPosition]="'left'" [cpPositionOffset]="'50%'" [cpPositionRelativeToArrow]="true"
+                                        [(colorPicker)]="indicator_color" (colorPickerSelect)="dataChange()">
+                                    </div>
+                                    <ng-container *ngIf="indicator_color">
+                                        <div class="btn btn-sm btn-outline-danger ml-2" style="padding: .1rem .4rem;" (click)="optionPageValue('', 'background_color')">
+                                            <i class="fas fa-times"></i>
+                                        </div>
+                                    </ng-container>
+                                </div>
+
+                            </div>
+
+                        </ng-container>
+
+                        <div class="form-group" *ngIf="gallery_type == 'mosaic'">
+
+                            <small>Mosaic image width - <span class="text-muted" style="font-size: .8em;">E.g. 150 (no px)</span></small>
+
+                            <input type="text" placeholder="150" class="form-control  form-control-sm" [(ngModel)]="mosaic_image_width" (change)="dataChange()" /> 
+                        </div>
+
+                       
+                        <div class="form-group">
+
+                            <small>Stylize - <span class="text-muted" style="font-size: .8em;">Add border and shadow to the images</span></small>
+
+                            <select class="form-control  form-control-sm" [(ngModel)]="stylized_gallery" (change)="dataChange()">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+
+                        </div>
+                        <div class="form-group">
+
+                            <small>Images height - <span class="text-muted" style="font-size: .8em;">E.g. 150px</span></small>
+
+                            <input type="text" placeholder="150px" class="form-control  form-control-sm" [(ngModel)]="gallery_image_height" (change)="dataChange()" /> 
+
+                        </div>
+                        <div class="form-group">
+
+                            <small>Icon size - <span class="text-muted" style="font-size: .8em;">E.g. 2rem / 16px</span></small>
+
+                            <input type="text" placeholder="2rem" class="form-control  form-control-sm" [(ngModel)]="gallery_icon_size" (change)="dataChange()" /> 
+
+                        </div>
+                        <div class="form-group">
+
+                            <small>Image placement</small>
+
+                            <select class="form-control  form-control-sm" [(ngModel)]="is_cover_image_style" (change)="dataChange()">
+                                <option value="true">Cover</option>
+                                <option value="false">Contain</option>
+                            </select>
+
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

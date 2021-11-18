@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{ data.name }}</h2>
+<mat-dialog-content class="mb-2">
+
+    <ng-container *ngIf="data.properties">
+  
+        <ng-container *ngIf="data.properties.length == 0"> 
+            <div class="text-italic">
+                No properties.
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="data.properties.length > 0"> 
+
+            <ul>
+                <li *ngFor="let prop of data.properties">{{ prop.name }}</li>
+            </ul>
+            
+        </ng-container>
+
+    </ng-container>
+
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">
+  <button class="btn btn-primary" [mat-dialog-close]="false">Close</button>  
+</mat-dialog-actions>

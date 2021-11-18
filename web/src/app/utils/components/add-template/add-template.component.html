@@ -1,0 +1,32 @@
+<div class="p-5">
+    <div class="d-flex justify-content-center">
+        <div class="w-50">
+            <small>Select template</small>
+
+            <ng-container *ngIf="!loading">
+                <ng-container *ngIf="templates.length > 0">
+                    <select class="form-control form-control-sm" [(ngModel)]="template_id" [ngModelOptions]="{standalone: true}" (change)="templateSelect()">
+                        <option *ngFor="let t of templates" value="{{ t._id }}">{{ t.name }}</option>
+                    </select>
+                </ng-container>
+                <ng-container *ngIf="templates.length == 0">
+                    <select class="form-control form-control-sm">
+                        <option>-- No templates available --</option>
+                    </select>
+                </ng-container>
+
+
+                <ng-container *ngIf="template && template.fields.length > 0">
+                    
+                    <div class="my-2 form-group" *ngFor="let t of template.fields">
+                        <small>{{ t.label }}</small>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="t.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeValue(t.name, t.value)" />
+                       
+                    </div>
+
+                </ng-container>
+            </ng-container>
+        </div>        
+    </div>
+    
+</div>

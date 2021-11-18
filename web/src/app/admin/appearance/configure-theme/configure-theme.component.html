@@ -1,0 +1,110 @@
+<div class="h-100" style="overflow-y: auto;">
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate class="h-100">
+
+        <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-4">
+
+            <div class="d-flex text-muted"></div>
+
+            <div>
+                <button class="btn btn-outline-secondary mr-3" type="button" (click)="revertTheme()">
+                    <i class="fas fa-history"></i> &nbsp;Revert
+                </button>
+                <button class="btn btn-outline-warning mr-3" type="button" (click)="uploadTheme()">
+                    <i class="fas fa-upload"></i> &nbsp;Upload
+                </button>
+                <button class="btn btn-outline-success mr-3" type="button" (click)="backupTheme()">
+                    <i class="fas fa-download"></i> &nbsp;Backup
+                </button>
+                <button class="btn btn-primary" type="submit">Save theme</button>
+            </div>
+
+
+        </div>
+        <div class="container py-4">
+
+            <ng-container *ngIf="themeUploadSaveWarning">
+                <div class="alert alert-warning" style="font-size: 1.2em;" role="alert">
+                    Theme was uploaded successfully. To keep the changes you need to click the 'Save theme' button.
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="newTheme"><h2>Create new theme</h2></ng-container>
+            <ng-container *ngIf="!newTheme"><h2>Update theme</h2></ng-container>
+
+            <div *ngIf="!newTheme && themeInfo" class="d-flex align-items-center">
+                Version: 
+                <span class="badge badge-primary font-weight-normal ml-2">v{{ themeInfo.version  }}</span>
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group mt-4">
+                        <label>Theme name</label>
+                        <input type="text" class="form-control input-lg" placeholder="My theme"
+                            formControlName="name" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group mt-2">
+                        <label>Description</label>
+                        <textarea type="text" class="form-control" formControlName="description" style="min-height: 100px;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="mt-4 mb-3">Layout</h3>
+
+            <div class="form-group mt-2">
+                <h5>Header</h5>
+                <ng-container *ngIf="availableMenus && availableMenus.length > 0">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="mr-2">Available menus: </div>
+                        <ul class="list-inline mb-0">
+                            <li *ngFor="let menu of availableMenus">{{ menu.slug }}</li>
+                        </ul>
+
+                        <div class="btn btn-sm btn-outline-secondary ml-auto" (click)="enlarge('header')"><i class="fas fa-expand-arrows-alt"></i></div>
+                    </div>
+                </ng-container>                
+                <textarea class="form-control html-editor" formControlName="header" #headerhtml></textarea>
+            </div>
+
+            <div class="form-group mt-2">
+                <h5>Footer</h5>
+                <ng-container *ngIf="availableMenus && availableMenus.length > 0">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="mr-2">Available menus: </div>
+                        <ul class="list-inline mb-0">
+                            <li *ngFor="let menu of availableMenus">{{ menu.slug }}</li>
+                        </ul>
+
+                        <div class="btn btn-sm btn-outline-secondary ml-auto" (click)="enlarge('footer')"><i class="fas fa-expand-arrows-alt"></i></div>
+                    </div>
+                </ng-container>                
+                <textarea type="text" class="form-control html-editor" formControlName="footer" #footerhtml></textarea>
+            </div>
+
+            <div class="form-group mt-2">
+                <div class="d-flex align-items-center mb-2">
+                    <h5 class="mb-0">CSS</h5>
+                    <div class="btn btn-sm btn-outline-secondary ml-auto" (click)="enlarge('css')"><i class="fas fa-expand-arrows-alt"></i></div>
+                </div>
+                <textarea type="text" class="form-control html-editor" formControlName="css" #themecss></textarea>
+            </div>
+
+            <div class="form-group mt-2">
+                <div class="d-flex align-items-center mb-2">
+                    <h5 class="mb-0">Javascript</h5>
+                    <div class="btn btn-sm btn-outline-secondary ml-auto" (click)="enlarge('jsfile')"><i class="fas fa-expand-arrows-alt"></i></div>
+                </div>                
+                <textarea type="text" class="form-control html-editor" formControlName="jsfile" #themejs></textarea>
+            </div>
+
+
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,19 @@
+<ng-container *ngIf="loading">
+    <div class="row">
+        <div class="col my-5">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="!loading">
+    <google-map width="100%" [center]="center" [options]="options">
+        <map-marker
+            [position]="center"            
+        >
+        </map-marker>
+    </google-map>
+</ng-container>

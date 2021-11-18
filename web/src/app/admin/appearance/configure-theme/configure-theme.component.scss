@@ -1,0 +1,18 @@
+.html-editor {
+    min-height: 150px;
+}
+
+.list-inline {
+    li {
+        display: inline;
+        margin-right: 10px;
+        cursor: pointer;
+        background: #eee;
+        padding: 2px;
+    }
+}
+
+.CodeMirror {
+    border: 1px solid #eee;
+    height: auto;
+}

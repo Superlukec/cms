@@ -1,0 +1,44 @@
+<ng-container *ngIf="!loading">
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+        <h2 mat-dialog-title>{{ data.title }}</h2>
+        <mat-dialog-content class="mb-2">
+
+            <div class="form-group">
+                <label>Icon</label>
+                <app-select-icon [data]="data.icon" (selection)="selectedIcon($event)"></app-select-icon>
+            </div>
+
+            <div class="form-group mt-2">
+                <label>Attachment name</label>
+                <!--<select class="form-control form-control" formControlName="name">
+                    <option value="null">-- no parent --</option>
+                </select>-->
+                <input type="text" class="form-control" formControlName="name" />
+            </div>
+
+            <div class="form-group mt-2">
+                <label>File</label> 
+                <ng-container *ngIf="file">
+                    <div>
+                        <div class="d-flex w-100 pointer">
+                            <div style="font-size: 0.8em;" class="w-75 text-break">{{ file.url }}</div>
+                            <div class="ml-2"><i class="fas fa-link"></i></div>
+                        </div>
+                        <div class="d-flex mt-2">
+                            <div class="btn btn-outline-danger btn-sm" (click)="deleteAttachment(file._id)"><i class="far fa-trash-alt"></i></div>
+                        </div>
+                    </div>
+                </ng-container>          
+                <ng-container *ngIf="!file">
+                    <app-upload-file (data)="onFileUpload($event)" [assets]="true"></app-upload-file>
+                </ng-container>     
+            </div>
+
+        </mat-dialog-content>
+        <mat-dialog-actions class="mb-1">
+            <!--<button class="btn btn-primary mr-2" [mat-dialog-close]="true">Save</button>-->
+            <button class="btn btn-primary mr-2" type="submit">Save</button>
+            <button class="btn btn-secondary" [mat-dialog-close]="false">Cancel</button>
+        </mat-dialog-actions>
+    </form>
+</ng-container>

@@ -1,0 +1,127 @@
+<ng-container *ngIf="!loading">
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col">
+                <div class="p-4">
+
+                    <ng-container *ngIf="!add_site; else elseBlock">
+
+                        <h2>All sites</h2>
+
+                        <ng-container *ngIf="sites.length == 0">
+                            No sites.
+                        </ng-container>
+
+                        <ng-container *ngIf="sites.length > 0">
+                            <div class="row pt-2">
+                                <div class="col-6 col-lg-6 mb-2" *ngFor="let s of sites">
+                                    <div class="bg-white border p-4">
+                                        <div class="d-flex">
+                                            <div class="text-wrap w-75">
+                                                <h3 class="text-truncate" title="{{ s.title }}">{{ s.title }}</h3>
+                                                <div class="text-muted">{{ s.domain }}</div>
+                                            </div>
+                                            <div class="ml-auto" *ngxPermissionsOnly="['SUPER_ADMIN']">
+                                                <div class="btn text-danger btn-sm" (click)="deleteSite(s._id)">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="py-2 d-flex">
+
+                                            <div class="mr-2">
+                                                <div class="text-success" *ngIf="s.active">
+                                                    <i class="fas fa-check"></i> Active
+                                                </div>
+                                                <div class="text-danger" *ngIf="!s.active">
+                                                    <i class="fas fa-times"></i> Not active
+                                                </div>
+                                            </div>
+                                            <div class="mr-2">
+                                                <div class="text-success" *ngIf="s.public">
+                                                    <i class="fas fa-eye"></i> Public
+                                                </div>
+                                                <div class="text-danger" *ngIf="!s.public">
+                                                    <i class="fas fa-eye"></i> Not public
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <a class="btn btn-sm btn-outline-primary mt-2 mr-2" href="//{{ s.domain }}" target="_blank">View site</a>
+                                        <a class="btn btn-sm btn-outline-secondary mt-2" href="//{{ s.domain }}/admin" target="_blank"><i class="fas fa-key"></i> View admin</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <div class="d-block" style="height: 50px;"></div>
+
+                        <div class="my-2" *ngxPermissionsOnly="['SUPER_ADMIN']">
+                            <div class="btn btn-outline-primary" title="Add new site" (click)="addSite(true)"><i class="fas fa-plus"></i></div>
+                        </div>
+
+                    </ng-container>
+                    <ng-template #elseBlock>
+
+                        <div class="d-flex align-items-center">
+                            <h2>Add site</h2>
+
+                            <div class="ml-auto">
+                                <div class="btn btn-outline-danger" (click)="addSite(false)">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+
+                                    <form [formGroup]="mainForm" (ngSubmit)="addSiteSubmit()" novalidate>
+
+                                        <div class="form-group mt-4">
+                                            <label>Title</label>
+                                            <input type="text" class="form-control input-lg" placeholder="Example" formControlName="title" [ngClass]="{ 'is-invalid': submitted && f.title.errors }" />
+                                            <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
+                                                <div *ngIf="f.title.errors.required">Required field</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Domain</label>
+                                            <input type="text" class="form-control input-lg" placeholder="example.com" formControlName="domain" [ngClass]="{ 'is-invalid': submitted && f.domain.errors }" />
+                                            <div *ngIf="submitted && f.domain.errors" class="invalid-feedback">
+                                                <div *ngIf="f.domain.errors.required">Required field</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <mat-checkbox formControlName="configuration">
+                                                Create NGINX configuration (only Linux)                                                
+                                            </mat-checkbox>
+                                        </div>
+
+                                        <button class="btn btn-primary mt-2" type="submit">Add site</button>
+
+                                    </form>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </ng-template>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</ng-container>

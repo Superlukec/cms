@@ -1,0 +1,12 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!favicon.ico
+!login.jpg
+!preloader.gif
+!sample-favicon.png
+!settings.json
+!codemirror/*
+!ckeditor5-inline/*

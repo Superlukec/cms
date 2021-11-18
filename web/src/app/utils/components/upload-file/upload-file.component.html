@@ -1,0 +1,23 @@
+<div class="py-4">
+    <div class="upload-form">
+
+        <ng-container *ngIf="dragDrop">
+            <div class="mb-4">
+                <div class="drop-container card" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)"
+                    [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
+
+                    <div class="card-body text-center">
+                        <h5 class="card-title mb-0">Drag &amp; Drop</h5>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+
+        <input #uploader type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)"
+            [uploadInput]="uploadInput">
+
+        <mat-progress-bar class="aligner-item mt-2" [color]="color" [mode]="mode" [value]="progressbarValue">
+        </mat-progress-bar>
+    </div>
+</div>

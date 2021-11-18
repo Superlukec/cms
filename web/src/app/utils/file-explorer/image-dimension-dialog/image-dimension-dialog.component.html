@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Image dimension</h2>
+<mat-dialog-content>
+
+    <table class="table table-sm table-borderless">
+        <tr *ngFor="let d of data.dimensions">
+            <td>{{ d.name }}</td>
+            <td class="text-wrap" style="font-size: 0.8em;">{{ d.filename }}</td>
+            <td>
+                <div class="btn btn-outline-success btn-sm mr-2" ngxClipboard
+              [cbContent]="data.hostname + '/assets/' + d.filename" (cbOnSuccess)="copied($event)">Copy link</div>
+            </td>
+        </tr>
+    </table>
+
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">
+    <button class="btn btn-secondary" [mat-dialog-close]="false">Close</button>
+</mat-dialog-actions>

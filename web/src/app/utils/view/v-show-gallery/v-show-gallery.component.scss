@@ -1,0 +1,34 @@
+@import "bootstrap";
+
+.card-columns {  
+  @include media-breakpoint-only(lg) {
+    column-count: 4;
+  }
+  @include media-breakpoint-only(xl) {
+    column-count: 5;
+  }
+}
+
+
+.img-carousel {
+  background-repeat: no-repeat; 
+  background-size: contain; 
+  background-position: center center;
+}
+
+
+.carousel {
+
+  @include media-breakpoint-up(lg) {
+
+    .carousel-control-prev {
+      margin-left: -150px;
+    }
+
+    .carousel-control-next {
+      margin-right: -150px;
+    }
+
+  }
+    
+}

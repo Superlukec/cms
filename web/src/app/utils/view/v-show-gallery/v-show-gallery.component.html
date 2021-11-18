@@ -1,0 +1,195 @@
+<ng-container *ngIf="!loading && gallery.length > 0">
+  <div class="{{ options.box_class }} {{ options.margin }} {{ options.padding }}">
+    <ng-container *ngIf="isNormal">
+
+      <div class="row align-items-stretch ">
+
+        <ng-container *ngFor="let g of gallery">
+
+          <ng-container *ngIf="g">
+
+            <div class="d-flex flex-column align-items-center justify-content-center col-6 col-md{{ columns }} mb-4">
+
+              <div class="w-100 h-100" [ngClass]="{ 'shadow': options.stylized_gallery }">
+                
+                <ng-container *ngIf="g.image && g.image.filename">
+
+                  <ng-container *ngIf="g.link">
+                    <a href="{{ g.link }}">
+                      <div class="img mb-2 gallery-image w-100" 
+                        style="background: url('/assets/{{ g.image.filename }}'); background-repeat: no-repeat; background-position: center; "
+                        [ngStyle]="{ backgroundSize: (options.is_cover_image_style) ? 'cover' : 'contain', height: (!options.gallery_image_height) ? '200px' : options.gallery_image_height }">
+                      </div>
+                    </a>
+                  </ng-container>
+                  <ng-container *ngIf="!g.link">
+                    <div class="img mb-2 gallery-image w-100" 
+                      style="background: url('/assets/{{ g.image.filename }}'); background-repeat: no-repeat; height: 200px; background-position: center;"
+                      [ngStyle]="{ backgroundSize: (options.is_cover_image_style) ? 'cover' : 'contain', height: (!options.gallery_image_height) ? '200px' : options.gallery_image_height }">
+                    </div>
+                  </ng-container>
+
+                  <div *ngIf="g.text || g.description" class="mb-4 p-2">
+                    <h5 *ngIf="g.text" class="text-center">{{ g.text }}</h5>
+                    <ng-container *ngIf="g.description">
+                      <div [generateHTML]="g.description"></div>
+                    </ng-container>
+                  </div>
+
+                </ng-container>
+
+                <ng-container *ngIf="g.icon">
+
+                  <ng-container *ngIf="g.link">
+                    <a href="{{ g.link }}">
+                      <div class="img d-flex h-100 justify-content-center gallery-icon flex-column p-2">
+                        
+                          <div class="text-center mt-4">
+                            <span class="{{ g.icon }} text-blue"
+                              [ngStyle]="{ fontSize: (!options.gallery_icon_size) ? '3rem' : options.gallery_icon_size }"></span>
+                          </div>
+
+                          <div *ngIf="g.text || g.description"  class="p-2 mt-2">
+                            <h5 *ngIf="g.text" class="text-center">{{ g.text }}</h5>
+                            <ng-container *ngIf="g.description">
+                              <div [generateHTML]="g.description"></div>
+                            </ng-container>
+                          </div>
+
+                      </div>                      
+                    </a>
+                  </ng-container>
+
+                  <ng-container *ngIf="!g.link">
+                    <div class="img d-flex h-100 justify-content-center gallery-icon flex-column p-2">
+                    
+                      <div class="text-center mt-4">
+                        <span class="{{ g.icon }} text-blue"
+                          [ngStyle]="{ fontSize: (!options.gallery_icon_size) ? '3rem' : options.gallery_icon_size }"></span>
+                      </div>
+
+                      <div *ngIf="g.text || g.description" class="p-2 mt-2">
+                        <h5 *ngIf="g.text" class="text-center">{{ g.text }}</h5>
+                        <ng-container *ngIf="g.description">
+                          <div [generateHTML]="g.description"></div>
+                        </ng-container>
+                      </div>
+                        
+                    </div>
+                  </ng-container>
+
+                </ng-container>
+
+              </div><!-- .w-100 -->
+
+            </div>
+
+          </ng-container>
+
+        </ng-container>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isSlideshow">
+
+
+      <div id="{{ slideshowId }}" class="carousel slide" [attr.data-ride]="'carousel'"
+        [ngStyle]="{ height: (!options.gallery_image_height) ? '300px' : (imageHeightWithoutPixel + 'px') }">
+        <div class="d-none d-md-block">
+          <ol class="carousel-indicators" *ngIf="options.show_slideshow_indicator">
+            <ng-container *ngFor="let c of carouselPages; let i = index">
+              <li [attr.data-target]="'#' + slideshowId" [attr.data-slide-to]="i" [ngClass]="{ 'active' : i == 0 }"
+                [ngStyle]="{ backgroundColor: ((!options.indicator_color) ? '#333' : options.indicator_color) }"></li>
+            </ng-container>
+          </ol>
+        </div>
+        <div class="carousel-inner">
+
+          <ng-container *ngFor="let g of carouselPages; let i = index">
+
+            <div class="carousel-item" [ngClass]="{ 'active' : i == 0 }">
+
+              <div class="row">
+
+                <ng-container *ngFor="let s of g.slides">
+
+                  <div class="col">
+                    
+                    <div class="card border-0" *ngIf="!s.blank">
+                      <div class="card-body text-center">
+                        <ng-container *ngIf="s.image && s.image.filename">
+
+                          <div class="img-carousel" [ngClass]="{ 'shadow': options.stylized_gallery }" style="background-image: url('/assets/{{ s.image.filename }}');" [ngStyle]="{ height: (!options.gallery_image_height) ? '300px' : options.gallery_image_height }">
+                          </div>
+
+                        </ng-container>
+                        <ng-container *ngIf="s.icon">
+                          <div class="img d-flex h-100 justify-content-center gallery-icon flex-column p-2" [ngClass]="{ 'shadow': options.stylized_gallery }" [ngStyle]="{ height: (!options.gallery_image_height) ? '500px' : options.gallery_image_height }">
+                      
+                            <div class="text-center mt-4">
+                              <span class="{{ s.icon }} text-blue"
+                                [ngStyle]="{ fontSize: (!options.gallery_icon_size) ? '3rem' : options.gallery_icon_size }"></span>
+                            </div>
+    
+                            <div *ngIf="s.text || s.description"  class="p-2 mt-2">
+                                <h5 *ngIf="s.text" class="text-center">{{ s.text }}</h5>
+                                <ng-container *ngIf="s.description">
+                                  <div [generateHTML]="s.description"></div>
+                                </ng-container>
+                              </div>
+                            </div>
+
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+
+                </ng-container>
+
+              </div>
+
+            </div>
+
+          </ng-container>
+
+        </div>
+        
+        <a class="carousel-control-prev" href="#{{ slideshowId }}" role="button" data-slide="prev">
+          <span class="fas fa-chevron-left" aria-hidden="true" style="font-size: 2rem;" [ngStyle]="{ color: ((!options.indicator_color) ? '#333' : options.indicator_color) }"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#{{ slideshowId }}" role="button" data-slide="next">
+          <span class="fas fa-chevron-right" aria-hidden="true" style="font-size: 2rem;" [ngStyle]="{ color: ((!options.indicator_color) ? '#333' : options.indicator_color) }"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+
+
+    </ng-container>
+
+    <ng-container *ngIf="isMosaic">
+      <!--<ngx-masonry-gallery [width]="(options.mosaic_image_width) ? options.mosaic_image_width : 250 " [images]="mosaicImages"></ngx-masonry-gallery>-->
+
+      <div class="card-columns">
+
+        <ng-container *ngFor="let g of gallery">
+
+          <ng-container *ngIf="g.image && g.image.filename">
+
+            <div class="card border-0 text-center m-md-5">
+              <div>
+                <img src="assets/{{ g.image.filename }}" [ngClass]="{ 'img-fluid' : (!options.mosaic_image_width)  }" [ngStyle]="{ width: (options.mosaic_image_width) ? (options.mosaic_image_width + 'px') : '' }">
+              </div>
+            </div>
+
+          </ng-container>
+
+        </ng-container>
+
+      </div>
+
+    </ng-container>
+  </div>
+</ng-container>

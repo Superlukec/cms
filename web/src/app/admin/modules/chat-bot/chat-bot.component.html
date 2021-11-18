@@ -1,0 +1,5 @@
+<app-chatting *ngIf="!page"></app-chatting>
+
+<app-chat-settings *ngIf="page == 'settings'"></app-chat-settings>
+
+<app-chat-room [id]="chatId" *ngIf="chatId && page != 'settings'"></app-chat-room>

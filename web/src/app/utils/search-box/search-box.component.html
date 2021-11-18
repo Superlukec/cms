@@ -1,0 +1,19 @@
+<div [formGroup]="mainForm">
+    <div class="d-flex border align-items-center search-box">
+        <div class="ml-2 search-icon">
+            <i class="fas fa-search"></i>
+        </div>
+        <input type="text" class="search-input form-control form-control-sm" placeholder="Search"
+            formControlName="search" />
+    </div>
+    <div class="search-result border" [hidden]="searchResult.length == 0">
+        <ul class="list-unstyled mb-0">
+            <li *ngFor="let r of searchResult; let i = index;">
+                <a routerLink="{{ r.slug }}" class="d-flex align-items-center">
+                    <div class="text-truncate" style="width: 80%;">{{ r.title }}</div>
+                    <div class="text-muted font-italic ml-auto" style="font-size: 0.8rem">{{ r.lang_prefix }} / {{ r.type }}</div>
+                </a>                
+            </li>
+        </ul>
+    </div>
+</div>

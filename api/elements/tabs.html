@@ -1,0 +1,9 @@
+<div class="row">
+    <div class="col {{ options.box_class }} {{ options.margin }} {{ options.padding }}">
+        {{#if options.tabs}}
+
+            [app-v-show-tabs postId="{{{ post_id }}}" blockId="{{{ block_id }}}"]
+
+        {{/if}}
+    </div>
+</div>

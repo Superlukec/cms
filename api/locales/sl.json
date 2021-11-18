@@ -1,0 +1,19 @@
+{
+	"VAT ID" : "ID za DDV",
+	"Registration no" : "Matična številka",
+	"INVOICE": "RAČUN",
+	"Date of service" : "Storitev opravljena",
+	"Payment due" : "Rok plačila",
+	"Currency" : "Valuta",
+	"Order number" : "Št. naročila",
+	"Recipient of the invoice" : "Prejemnik računa",
+	"Description" : "Opis",
+	"Quantity" : "Količina",
+	"Discount": "Popust",
+	"Price" : "Cena",
+	"VAT" : "DDV",
+	"Total" : "Vsota",
+	"TO PAY" : "ZA PLAČILO",
+	"Payment details" : "Podatki za plačilo",
+	"Reference": "Referenca"
+}

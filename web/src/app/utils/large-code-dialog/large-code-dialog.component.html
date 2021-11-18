@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Edit code</h2>
+<mat-dialog-content class="mb-2">
+    <textarea class="form-control html-editor" [(ngModel)]="newCode" [ngModelOptions]="{standalone: true}" #code></textarea>
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">
+  <button class="btn btn-outline-secondary mr-2" [mat-dialog-close]>Discard changes</button>  
+  <button class="btn btn-primary" (click)="close()">Update code</button>
+</mat-dialog-actions>

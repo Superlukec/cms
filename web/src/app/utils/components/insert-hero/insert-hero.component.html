@@ -1,0 +1,66 @@
+<div class="p-5">
+    <div class="d-flex justify-content-center">
+        <div class="w-75">
+
+            <div>
+                <small>Title</small>
+                <div class="d-flex">
+                    <input type="text" style="width: initial;" class="form-control form-control-sm w-75 mr-4" [(ngModel)]="title" [ngModelOptions]="{standalone: true}" (change)="dataChange()" />
+                    <div [style.background]="titleColor"
+                                    style="width: 30px; height: 30px; border: 1px solid #ccc; cursor: pointer;"
+                                    [cpPosition]="'left'" [cpPositionOffset]="'50%'" [cpPositionRelativeToArrow]="true"
+                                    [(colorPicker)]="titleColor" (colorPickerSelect)="dataChange()">
+                                </div>
+                    <ng-container *ngIf="titleColor">
+                        <div class="btn btn-sm btn-outline-danger ml-2" style="padding: .22rem .5rem;" (click)="titleColor = ''; dataChange()">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="mt-2">
+                <small>Subtitle</small>
+                <div class="d-flex">
+                    <input type="text" style="width: initial;" class="form-control form-control-sm w-75 mr-4" [(ngModel)]="subtitle" [ngModelOptions]="{standalone: true}" (change)="dataChange()" />                    
+                    <div [style.background]="subtitleColor"
+                                    style="width: 30px; height: 30px; border: 1px solid #ccc; cursor: pointer;"
+                                    [cpPosition]="'left'" [cpPositionOffset]="'50%'" [cpPositionRelativeToArrow]="true"
+                                    [(colorPicker)]="subtitleColor" (colorPickerSelect)="dataChange()">
+                                </div>
+
+                    <ng-container *ngIf="subtitleColor">
+                        <div class="btn btn-sm btn-outline-danger ml-2" style="padding: .22rem .5rem;" (click)="subtitleColor = ''; dataChange()">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col">
+                    <small>Size</small>
+                    <select class="form-control form-control-sm" [(ngModel)]="size" [ngModelOptions]="{standalone: true}" (change)="dataChange()">
+                        <option value="display-1">Big text 1</option>
+                        <option value="display-2">Big text 2</option>
+                        <option value="display-3">Big text 3</option>
+                        <option value="display-4">Big text 4</option>
+                        <option value="h1">Heading 1</option>
+                        <option value="h2">Heading 2</option>
+                        <option value="h3">Heading 3</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <small>Alignment</small>
+                    <select class="form-control form-control-sm" [(ngModel)]="alignment" [ngModelOptions]="{standalone: true}" (change)="dataChange()">
+                        <option value="">Default</option>
+                        <option value="text-center">Center</option>
+                        <option value="d-flex align-items-center">Vertical align</option>
+                    </select>
+                </div>
+            </div>
+            
+        </div>        
+    </div>
+    
+</div>

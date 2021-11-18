@@ -1,0 +1,19 @@
+{
+	"VAT ID": "VAT ID",
+	"Registration no": "Registration no",
+	"INVOICE": "INVOICE",
+	"Date of service": "Date of service",
+	"Payment due": "Payment due",
+	"Currency": "Currency",
+	"Order number": "Order number",
+	"Recipient of the invoice": "Recipient of the invoice",
+	"Description": "Description",
+	"Quantity": "Quantity",
+	"Discount": "Discount",
+	"Price": "Price",
+	"VAT": "VAT",
+	"Total": "Total",
+	"TO PAY": "TO PAY",
+	"Payment details": "Payment details",
+	"Reference": "Reference"
+}

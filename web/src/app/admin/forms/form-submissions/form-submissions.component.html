@@ -1,0 +1,96 @@
+<div class="p-4" *ngIf="!loading">
+
+    <ng-container *ngIf="formsList.length == 0">
+
+        No forms added.
+
+        <a class="btn btn-primary" routerLink="/admin/forms/new">Add form</a>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="formsList.length > 0">
+
+        <div class="clearfix mb-4">
+            <div class="float-left">
+                <select class="form-control form-control-sm" [(ngModel)]="selectedForm"
+                    [ngModelOptions]="{standalone: true}" (change)="onFormChange(selectedForm)">
+                    <option *ngFor="let f of formsList" value="{{ f._id }}">{{ f.name  }}</option>
+                </select>
+            </div>
+        </div>
+
+
+
+        <div *ngIf="resultsLength > 0">
+            <div class="d-flex">
+                <div class="float-right">
+                    <div class="btn btn-sm btn-danger" (click)="removeAll(selectedForm)"><i
+                            class="fas fa-trash-alt"></i>&nbsp; Remove all</div>
+                </div>
+            </div>
+
+            <table mat-table [dataSource]="formsData" multiTemplateDataRows class="mat-elevation-z0 w-100 mt-3">
+
+                <ng-container matColumnDef="ip">
+                    <th mat-header-cell *matHeaderCellDef> IP </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.ip}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="location">
+                    <th mat-header-cell *matHeaderCellDef> Location </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.location}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="emailSent">
+                    <th mat-header-cell *matHeaderCellDef> Email sent </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div *ngIf="element.emailSent" class="text-primary">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div *ngIf="!element.emailSent" class="text-danger">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date_created">
+                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                    <td mat-cell *matCellDef="let element">{{element.date_created | date: "medium"}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                        <div class="example-element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+                            <div class="example-element-description w-100">
+                                <label class="mat-header-cell">Additional details</label>
+                                <table class="table table-sm table-bordered m-0">
+                                    <tr *ngFor="let l of element.elements">
+                                        <td>{{ l.name }}</td>
+                                        <td>{{ l.value }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+                    [class.example-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+            </table>
+        </div>
+        <div *ngIf="resultsLength == 0">
+            No forms submissions.
+        </div>
+    </ng-container>
+</div>

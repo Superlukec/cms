@@ -1,0 +1,122 @@
+<div class="p-5">
+    <div class="d-flex justify-content-center">
+
+        <div class="w-100">
+
+            <div *ngFor="let tab of tabs; let i = index;" class="mb-4">
+
+                <div class="d-flex flex-row-reverse">
+                    <button type="button"
+                        class="btn btn-outline-danger btn-circle remove-component btn-sm"
+                        (click)="removeTab(i)"><i class="fas fa-times"
+                            style="margin-top: -1px;margin-left: -1px;"></i></button>
+                </div>
+
+                <div class="form-group">
+                    <small>Title</small>
+                    <input type="text" [(ngModel)]="tab.title" (change)="onTextChange()" class="form-control form-control-sm" />
+                </div>
+
+                <ng-container *ngIf="!tab.tabType">
+                    <div class="d-flex align-items-center">
+
+                        <small>Select type: </small>
+
+                        <div class="m-2 ml-3">
+                            <div class="btn btn-outline-secondary" (click)="selectType(i, 'text')">
+                                <i class="fas fa-paragraph"></i>
+                                Text
+                            </div>                            
+                        </div>
+
+                        <div class="m-2">                            
+                            <div class="btn btn-outline-success" (click)="selectType(i, 'products')">
+                                <i class="fas fa-box-open"></i>
+                                Products
+                            </div>
+                        </div>
+
+                    </div>
+                </ng-container>
+
+                <div class="card" *ngIf="tab.tabType">
+                    <div class="card-body">
+
+                        <div class="d-flex align-items-center my-2">
+
+                            <h5 class="mb-0 text-capitalize">{{ tab.tabType }}</h5>
+
+                            <div class="btn btn-sm btn-outline-danger ml-auto" (click)="selectType(i, '')">
+                                <i class="fas fa-undo-alt"></i>
+                                Change type
+                            </div>
+
+                        </div>
+                
+
+                    <ng-container *ngIf="tab.tabType == 'text'">                       
+
+                        <div class="form-group">
+                            <small>Text</small>
+                            <div class="border">
+                                <app-ckeditor
+                                    [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'fontColor', 'alignment', '|', 'bulletedList', 'numberedList', '|', 'insertTable','mediaEmbed', '|', 'undo', 'redo' ] }"
+                                    [data]="tab.text" (output)="onCkEditorValue(i, $event)"></app-ckeditor>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="tab.tabType == 'products'">
+                        
+                        <div class="form-group">
+                            <small>Select product(s)</small>
+                            <div class="border p-2 mb-3" style="max-height: 300px; overflow-y: auto;">
+                                <div *ngFor="let b of tab.brands">
+                
+                                    <mat-checkbox [(ngModel)]="b.selected" [ngModelOptions]="{standalone: true}" (change)="selectBrandCheckbox(i, b.selected, b._id)">{{ b.name }}</mat-checkbox>
+                
+                                </div>
+                            </div>
+
+                            <div>
+                                <small>Limit number of products</small>
+                                <input style="width: initial;" type="number" class="form-control form-control-sm" [(ngModel)]="tab.limit" [ngModelOptions]="{standalone: true}" (ngModelChange)="limitChange(i, tab.limit)" />
+                            </div>
+
+                            <div class="mt-2">
+                                <small>Show product excerpt</small>
+                                <select style="width: initial;" class="form-control form-control-sm" [(ngModel)]="tab.showExcert" [ngModelOptions]="{standalone: true}" (change)="dataChange()">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+
+                            <div class="mt-2">
+                                <small>Number of products per column</small>
+                                <!--<input style="width: initial;" type="number" class="form-control form-control-sm" [(ngModel)]="tab.products_per_column" [ngModelOptions]="{standalone: true}" (ngModelChange)="limitChange(i, tab.limit)" />-->
+                                <select style="width: initial;" class="form-control form-control-sm" [(ngModel)]="tab.products_per_column" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataChange()">
+                                    <option value="0">Default</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </ng-container>
+                
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-center">   
+                <div class="btn btn-sm btn-outline-primary" (click)="addTab()">
+                    <i class="fas fa-plus"></i>
+                </div>             
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,33 @@
+<h2 class="mb-0" mat-dialog-title>Add language</h2>
+
+<form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+
+    <mat-dialog-content>
+
+        <div class="row  mt-2">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>Language name</label>
+                    <input type="text" formControlName="language" class="form-control input-lg" placeholder="English"  [ngClass]="{ 'is-invalid': submitted && f.language.errors }" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>Language prefix</label>
+                    <input type="text" formControlName="prefix" class="form-control input-lg" placeholder="en" [ngClass]="{ 'is-invalid': submitted && f.prefix.errors }" />
+                </div>
+            </div>
+        </div>
+
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="mb-1">
+        <button class="btn btn-outline-secondary" [mat-dialog-close]>Cancel</button>
+        <button class="btn btn-primary ml-2" type="submit">Save language</button>
+    </mat-dialog-actions>
+
+</form>

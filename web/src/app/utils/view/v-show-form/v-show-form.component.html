@@ -1,0 +1,67 @@
+<ng-container *ngIf="!loading && form">
+
+    <ng-container *ngIf="customHTML">
+        <div id="{{ id }}" [innerHTML]="html | sanitizeHtml"></div>
+    </ng-container>
+    <ng-container *ngIf="!customHTML">
+
+
+        <form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+            <ng-container *ngIf="form.elements && form.elements.length > 0">
+                <div *ngFor="let el of form.elements">
+    
+                    <div class="form-group mb-3" *ngIf="el.type == 'text'">
+                        <label>{{ el.label }}<span *ngIf="el.required" class="text-danger">*</span></label>
+                        <input type="text" style="width: initial;" class="form-control form-control-sm" formControlName="{{ el.name }}" [ngClass]="{ 'is-invalid': submitted && !getFormValue(el.name) }" />
+                        
+                    </div>
+    
+                    <div class="form-group mb-3" *ngIf="el.type == 'textarea'">
+    
+                        <label>{{ el.label }}<span *ngIf="el.required" class="text-danger">*</span></label>
+                        <textarea class="form-control form-control-sm" formControlName="{{ el.name }}" [ngClass]="{ 'is-invalid': submitted && !getFormValue(el.name) }"></textarea>
+    
+                    </div>
+    
+                    <div class="form-group mb-3" *ngIf="el.type == 'checkbox'">
+    
+                        <div class="d-flex">
+                            <div>
+                                <input type="checkbox" formControlName="{{ el.name }}" />
+                            </div>
+                            <div class="ml-2">
+                                <span *ngIf="el.required" class="text-danger">*</span> <span [ngClass]="{ 'text-danger': submitted && !getFormValue(el.name) }">{{ el.label }}</span>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                    <div class="form-group mb-3" *ngIf="el.type == 'yes_no'">
+    
+    
+                        <label>{{ el.label }}<span *ngIf="el.required" class="text-danger">*</span></label>
+    
+                        <select class="form-control form-control-sm" formControlName="{{ el.name }}" [ngClass]="{ 'is-invalid': submitted && !getFormValue(el.name) }">
+                            <option selected="selected">Yes</option>
+                            <option>No</option>
+                        </select>
+    
+    
+                    </div>
+    
+                </div>
+                <div *ngIf="form.elements.length > 0" class="mt-4">
+                    <button class="btn btn-outline-primary" type="submit">
+                        <ng-container *ngIf="form.submit_btn">
+                            {{ form.submit_btn }}
+                        </ng-container>
+                        <ng-container *ngIf="!form.submit_btn">
+                            Submit
+                        </ng-container>
+                    </button>
+                </div>
+            </ng-container>
+        </form>
+
+    </ng-container>
+</ng-container>

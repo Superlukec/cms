@@ -1,0 +1,309 @@
+<ng-container *ngIf="!loading">
+
+    <ng-container *ngIf="brands.length == 0">
+        <div class="container">
+            <div class="row mt-4">
+                <div class="col-6">
+                    <div>First you need to add brand.</div>
+                    <a class="btn btn-outline-primary btn-sm mt-3" routerLink="/admin/products/brands">Add brand</a>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="brands.length > 0">
+        <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate class="h-100 d-flex flex-column">
+
+
+            <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-2 px-md-4">
+
+
+                <div class="d-flex text-muted">
+                </div>
+
+                <div>
+                    <div class="btn btn-outline-danger btn mr-5" *ngIf="id" (click)="deleteProduct()">Delete</div>
+                    <a target="_blank" routerLink="/{{f.slug.value}}" class="btn btn-secondary ml-2"
+                        *ngIf="id">Preview</a>
+                    <button class="btn btn-primary ml-2" type="submit">Save</button>
+
+
+                    <ng-container *ngIf="layoutSize < 2">
+                        <div class="btn btn-outline-info ml-2" (click)="showSidebar(!showOptionSidebar)">
+                            <i class="fas fa-bars"></i>
+                        </div>
+                    </ng-container>
+                </div>
+
+
+            </div>
+
+
+            <div class="d-flex align-items-stretch flex-grow-1 overflow-y">
+                <div class="col h-100 overflow-y">
+
+
+                    <div class="container h-100">
+
+                        <h3 class="mt-4">
+                            <ng-container *ngIf="!id">Add new product</ng-container>
+                            <ng-container *ngIf="id">Edit product</ng-container>
+                        </h3>
+
+                        <div class="row mt-4">
+                            <div class="col-12 col-lg-6">
+
+                                <div class="form-group">
+                                    <label>Select brand</label>
+                                    <select class="form-control form-control" formControlName="brand_id"
+                                        (change)="changeBrand(f.brand_id.value)">
+                                        <option *ngFor="let b of brands" value="{{ b._id }}">{{ b.name }}</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Product name</label>
+                                    <input type="text" class="form-control form-control" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                        <div *ngIf="f.name.errors.required">Required field</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Slug</label>
+                                    <input type="text" class="form-control form-control" formControlName="slug" [ngClass]="{ 'is-invalid': submitted && f.slug.errors }" />
+                                    <div *ngIf="submitted && f.slug.errors" class="invalid-feedback">
+                                        <div *ngIf="f.slug.errors.required">Required field</div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group mt-5">
+                                    <label>Parent product</label>
+                                    <select class="form-control form-control" formControlName="parent_id">
+                                        <option value="null">-- no parent --</option>
+                                        <option *ngFor="let pro of productHirerachy" value="{{ pro._id }}">
+                                            {{ pro.name }}</option>
+                                    </select>
+                                </div>
+
+
+
+
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                Product images
+
+                                <div *ngIf="images.length > 0">
+                                    <div class="row">
+                                        <div class="col-12 col-md-6 my-4" *ngFor="let f of images">
+                                            <div style="position: absolute; right: 0; margin-top: -15px; width: 35px; z-index: 9;"
+                                                class="p-2 btn-circle text-center pointer btn-success" *ngIf="f.hero">
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="bg-white">
+                                                <div [ngStyle]="{background: 'url(' + f.src + ')', width: '100%', height: '250px', backgroundSize: 'contain', backgroundPosition: 'center center', backgroundRepeat: 'no-repeat' }"
+                                                    class="inner-container">
+                                                    <div class="overlay d-flex justify-content-center align-items-center">
+                                                        <div class="d-flex large-fonts-button">
+                                                            <button type="button" class="btn btn-outline-light mr-4"
+                                                                (click)="addHero(f._id)">
+                                                                <i class="fas fa-star"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-outline-light"
+                                                                (click)="deleteImage(f._id)">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <app-upload-image (data)="onImageUpload($event)" [multiple]="true" [small]="true">
+                                </app-upload-image>
+                            </div>
+                        </div>
+                        <div class="mt-5">
+                            <h5>Description &amp; Features</h5>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
+
+                                <div class="form-group">
+                                    <label>Excerpt</label>
+
+                                    <div class="bg-white border" [ngClass]="{ 'border-danger': submitted && f.excerpt.errors }">
+                                        <app-ckeditor
+                                            [config]="{ toolbar: ['bold', 'italic', '|', 'undo', 'redo'] }"
+                                            [data]="f.excerpt.value" (output)="onCkEditorValue($event, 'excerpt')">
+                                        </app-ckeditor>
+                                    </div>
+                                    <div *ngIf="submitted && f.excerpt.errors" class="text-danger">
+                                        <div *ngIf="f.excerpt.errors.required" style="font-size: 0.8em;">Required field</div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group mt-5">
+                                    <label>Description</label>
+
+                                    <div class="bg-white border" [ngClass]="{ 'border-danger': submitted && f.description.errors }" >
+                                        <app-ckeditor
+                                            [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'blocks', 'link', 'fontColor', 'alignment', '|', 'bulletedList', 'numberedList', '|', 'insertTable','mediaEmbed', '|', 'undo', 'redo' ] }"
+                                            [data]="f.description.value"
+                                            (output)="onCkEditorValue($event, 'description')"></app-ckeditor>
+                                    </div>
+                                    <div *ngIf="submitted && f.description.errors" class="text-danger">
+                                        <div *ngIf="f.description.errors.required" style="font-size: 0.8em;">Required field</div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div>
+                                    <label>Features</label>
+
+                                    <div class="card mb-4" *ngFor="let f of features; let i = index;">
+                                        
+                                        <div style="position: absolute; right: 0; margin-top: -15px; width: 35px; z-index: 9;"
+                                            class="p-2 btn-circle text-center pointer btn-primary"
+                                            (click)="editFeature(f)">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </div>
+                                        <div style="position: absolute; right: 40px; margin-top: -15px; width: 35px; z-index: 9;"
+                                            class="p-2 btn-circle text-center pointer btn-danger"
+                                            (click)="deleteFeature(f._id)">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </div>
+
+                                        <div style="position: absolute; right: 90px; margin-top: -15px; width: 35px; z-index: 9;"
+                                            class="p-1">
+                                            <input type="text" class="form-control form-control-sm" [(ngModel)]="f.index" [ngModelOptions]="{standalone: true}" (change)="changeFeatureSort(f.index, i)"  value="{{ i }}" style="width: 30px;">
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div style="font-size: 1.8em;"><i class="{{ f.icon }}"></i></div>
+                                                <div class="ml-3 font-weight-bold" style="font-size: 1.2em;">
+                                                    {{ f.name }}</div>
+                                            </div>
+                                            <ng-container *ngIf="f.text">
+                                                <hr />
+                                                <div [generateHTML]="f.text"></div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <div class="btn btn-outline-primary btn-sm" (click)="addFeatureDialog()">Add
+                                            feature</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5">
+                            <h5>Attach files</h5>
+
+                            <div class="row">
+                                <div class="col-6">
+
+                                    <div class="card mb-4" *ngFor="let a of attachments">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center w-100">
+                                                <div style="font-size: 1.8em;"><i class="{{ a.icon }}"></i></div>
+                                                <div class="ml-3 font-weight-bold" style="font-size: 1.2em;">
+                                                    {{ a.name }}</div>
+                                                <div class="ml-auto d-flex">
+                                                    <div class="btn btn-outline-danger btn-sm mr-2"
+                                                        (click)="deleteAttachment(a._id)">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </div>
+                                                    <div class="btn btn-outline-primary btn-sm"
+                                                        (click)="editAttachment(a)">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <div class="btn btn-outline-primary btn-sm" (click)="addAttachmentDialog()">Add
+                                            attachment</div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="my-5">
+
+                            <div class="d-flex align-items-center">
+                                <h5 class="mb-0">Properties</h5>
+                                <div class="btn btn-sm btn-primary ml-4" (click)="addProperty()">Add property</div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-6">
+
+                                    <ng-container *ngIf="allProperties.length > 0">
+                                        <div class="w-100">
+
+                                            <div *ngFor="let p of allProperties" class="ml-2">
+                                                <mat-checkbox [(ngModel)]="p.selected"
+                                                    [ngModelOptions]="{standalone: true}">{{ p.name }}</mat-checkbox>
+                                            </div>
+
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="allProperties.length == 0">
+                                        <div class="py-2">No properties.</div>
+                                    </ng-container>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <ng-container *ngIf="multilanguage">
+                    <div class="sidebar-option p-3 overflow-y" *ngIf="showOptionSidebar">
+                        <div class="mb-3" *ngIf="multilanguage">
+                            <div class="sys-label">Choose language</div>
+
+                            <div class="py-2">
+                                <div class="d-flex w-50">
+                                    <select class="form-control form-control-sm" [(ngModel)]="selectedLang" [ngModelOptions]="{standalone: true}" (change)="onChangeLang($event.target.value)">
+                                    <option *ngFor="let lang of availableLanguages" value="{{ lang.prefix }}">{{ lang.language }}</option>
+                                </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sys-label mt-2">Meta tags (SEO)</div>
+                        <div class="py-2">
+                            <small>Keywords</small>
+                            <input type="text" formControlName="meta_keywords" class="form-control form-control-sm" placeholder="key, key, key" />
+                        </div>
+
+                        <div class="py-2">
+                            <small>Description</small>
+                            <textarea formControlName="meta_description" class="form-control form-control-sm" placeholder="Meta description"></textarea>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+        </form>
+    </ng-container>
+
+</ng-container>

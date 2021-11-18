@@ -1,0 +1,41 @@
+<ng-container *ngIf="!found">
+    <app-not-found-page></app-not-found-page>
+</ng-container>
+
+<ng-container *ngIf="shareable">
+    <div class="container mt-5">
+        <div class="my-5">
+            <h1>{{ shareable.name }}</h1>
+            <div class="shadow-sm border p-4">
+
+                <ng-container *ngIf="shareable.files.length > 0">
+
+                    <table class="table table-borderless shareables mt-3">
+                        <tr *ngFor="let f of shareable.files" class="my-5 pointer">
+                            <td class="align-middle" style="width: 50px;">
+                                <i class="fas fa-file"></i>
+                            </td>
+                            <td class="align-middle">
+                                {{ f.original_name }}
+
+                            </td>
+                            <td class="align-middle">
+                                {{ f.date_created | date: "medium" }}
+                            </td>
+                            <td class="align-middle">
+                                <div class="btn btn-sm btn-outline-success" (click)="prepareDownload(f._id)">Download
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="btn mt-2 btn-outline-success" (click)="prepareZip()">Download all as ZIP</div>
+
+                </ng-container>
+                <ng-container *ngIf="shareable.files.length == 0">
+                    No files.
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</ng-container>

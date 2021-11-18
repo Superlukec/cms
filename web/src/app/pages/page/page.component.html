@@ -1,0 +1,11 @@
+<ng-container *ngIf="!loading">
+    <ng-container *ngIf="!product">        
+        <div [innerHTML]="html | sanitizeHtml" (onFinish)="onGenerated()"></div>
+        <ng-container *ngIf="pageInfo && pageInfo.show_links_menu_children">            
+            <app-public-show-menu-children [pageId]="pageInfo._id"></app-public-show-menu-children>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="product">
+        <app-public-show-product [product]="product"></app-public-show-product>
+    </ng-container>
+</ng-container>

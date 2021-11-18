@@ -1,0 +1,5 @@
+  <app-show-categories *ngIf="!page"></app-show-categories>
+  
+  <app-new-category *ngIf="page == 'new'"></app-new-category>
+  
+  <app-new-category [id]="categoryId" *ngIf="categoryId && page != 'new'"></app-new-category>

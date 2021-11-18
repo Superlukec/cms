@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col {{ options.box_class }} {{ options.margin }} {{ options.padding }}">
+        {{#if value}}
+
+            {{#if options.img_height}}
+                {{#if (istrue options.is_cover_image_style)}}
+                <div style="background: url('{{ value }}'); height: {{ options.img_height }}px; background-repeat: no-repeat; background-size: cover; background-position: center;" height="{{ options.img_height }}" title="{{ options.title }}" alt="{{ options.alt }}" class="{{ options.img_class }}"></div>
+                {{else}}
+                <div style="background: url('{{ value }}'); height: {{ options.img_height }}px; background-repeat: no-repeat; background-size: contain; background-position: center;" height="{{ options.img_height }}" title="{{ options.title }}" alt="{{ options.alt }}" class="{{ options.img_class }}"></div>
+                {{/if}}
+            {{else}}
+                <img src="{{ value }}" class="img-fluid {{ options.img_class }}" title="{{ options.title }}" alt="{{ options.alt }}">
+            {{/if}}
+
+        {{/if}}
+    </div>
+</div>

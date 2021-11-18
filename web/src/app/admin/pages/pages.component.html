@@ -1,0 +1,8 @@
+<app-show-pages *ngIf="!page" [pageType]="pageType" [isPageType]="isPageType"></app-show-pages>
+
+<app-new-page *ngIf="page == 'new'" [type]="pageType"></app-new-page>
+
+<app-new-page [id]="postId" [type]="pageType" *ngIf="postId && page != 'new' && page != 'trash'"></app-new-page>
+
+
+<app-trash-bin-viewer [pageType]="pageType" *ngIf="page == 'trash'"></app-trash-bin-viewer>

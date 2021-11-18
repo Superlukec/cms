@@ -1,0 +1,127 @@
+<ng-container *ngIf="!loading">
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" class="h-100 d-flex flex-column">
+        <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-4">
+
+
+            <div class="d-flex text-muted">
+            </div>
+
+            <div>
+                <button class="btn btn-primary ml-2" type="submit">Update</button>
+            </div>
+
+
+        </div>
+
+
+        <div class="d-flex h-100">
+            <div class="col h-100" style="overflow-y: auto;">
+
+                <div class="container h-100">
+
+
+                    <div class="p-4">
+
+                        <h2>Cookies</h2>
+
+
+                        <ng-container *ngIf="cookiesAvailable.length > 0">
+
+                            <div class="border bg-white p-2 my-2">
+
+                                Active cookies
+                                
+                                <ul class="my-2">
+                                    <li *ngFor="let c of cookiesAvailable">{{ c.name }}</li>
+                                </ul>
+
+                            </div>
+
+                        </ng-container>
+
+
+                        <mat-checkbox formControlName="cookies" (change)="onChangeConsent($event.checked)">Enable cookie consent</mat-checkbox>
+
+                        
+
+                        <ng-container *ngIf="f.cookies.value">
+
+                            <h4 class="mt-4 mb-3 text-muted">Cookies consent settings</h4>
+
+                            <div class="my-4">
+                                <div class="btn btn-outline-success btn-sm" (click)="loadCookieTemplate()">Load text from template</div>
+                            </div>
+
+                            <!--<ng-container *ngIf="multilanguage">-->
+                              
+                                <mat-tab-group (selectedTabChange)="onChangeLang($event.index)" animationDuration="0ms">
+                                    <mat-tab *ngFor="let lang of cookiesData">
+
+                                        <ng-template mat-tab-label>                                            
+                                            {{ lang.language }}
+                                            <span class="ml-2" *ngIf="lang.error">
+                                                <i class="fas fa-exclamation-triangle text-danger"></i>
+                                            </span>
+                                        </ng-template>
+
+                                        <div class="my-2 mt-4">
+                                            <label>Cookie text <br><small class="text-muted">Short cookie text</small></label>
+                                            <div class="bg-white border" [ngClass]="{ 'border-danger': submitted && lang.error && lang.text.length == 0 }"> 
+                                                <app-ckeditor [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic' ] }" [data]="lang.text" (output)="onCkEditorValue($event)"></app-ckeditor>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group my-3">
+                                            <label>Agree - button text <br><small class="text-muted">More information - button text</small></label>
+                                            <input class="form-control" [(ngModel)]="lang.agree_text" [ngModelOptions]="{standalone: true}" [ngClass]="{ 'is-invalid': submitted && lang.error && (!lang.agree_text || lang.agree_text.length == 0) }" />
+                                        </div>
+
+            
+                                        <div class="form-group my-3">
+                                            <label>More information - button text <br><small class="text-muted">More information - button text</small></label>
+                                            <input class="form-control" [(ngModel)]="lang.more_information" [ngModelOptions]="{standalone: true}" [ngClass]="{ 'is-invalid': submitted && lang.error && (!lang.more_information || lang.more_information.length == 0) }" />
+                                        </div>
+
+                                        <div class="form-group my-3">
+                                            <label>Cookie information - headline <small>(optional)</small><br><small class="text-muted">Headline above cookie descripion</small></label>
+                                            <input class="form-control" [(ngModel)]="lang.cookie_information" [ngModelOptions]="{standalone: true}" />
+                                        </div>
+            
+            
+                                        <div class="my-2 mt-4" *ngIf="lang.cookies.length > 0">
+                                            <label>Cookie description <small>(optional)</small> <br><small class="text-muted">Cookies description and more detail information</small></label>
+                                            
+                                            <div class="my-2 border border-white p-2">
+                                                <table class="table table-sm table-borderless">
+                                                    <tr>
+                                                        <td class="text-muted"><small>cookie name</small></td>
+                                                        <td class="text-muted"><small>cookie description</small></td>
+                                                    </tr>
+                                                    <tr *ngFor="let c of lang.cookies">
+                                                        <td class="align-middle">
+                                                            {{ c.name }}
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <input class="form-control" [(ngModel)]="c.text" [ngModelOptions]="{standalone: true}" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+                                    </mat-tab>
+                                </mat-tab-group>
+
+                            <!--</ng-container>-->
+
+                        </ng-container>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-container>

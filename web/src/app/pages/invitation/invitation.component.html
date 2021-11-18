@@ -1,0 +1,104 @@
+<ng-container *ngIf="!loading">
+
+    <ng-container *ngIf="!invitationFound">
+        <div class="h-100">
+            <div class="container h-100">
+                <div class="row  h-100">
+                    <div class="col d-flex justify-content-center align-items-center">
+                        <div class="text-center">
+                            <h1>Invitation not found<br><small>We haven't found such invitation in our database</small></h1>
+                            <div routerLink="/" class="btn btn-outline-primary mt-md-4">Back to home page</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="invitationFound">
+        <div class="h-100">
+            <div class="container h-100">
+                <div class="row  h-100">
+                    <div class="col d-flex justify-content-center align-items-center">
+                        <div class="text-center" *ngIf="step == 1">
+                            <h1 class="mt-0">Success<br><small>We've found your invitation ...</small></h1>
+                           
+                            <div (click)="continue()" class="btn btn-lg btn-outline-success mt-md-4">Press here to continue</div>
+
+                        </div>
+                        <ng-container *ngIf="step == 2">
+                            <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate class="w-50">
+
+                                <div class="text-center">
+                                    <h1 class="my-0">Your account</h1>
+                                    <div>Please validate your information and choose your password</div>
+                                </div>
+
+                                <div class="my-5">
+                                    
+                                    <div class="row">
+                                       <div class="col">
+                                            <label>E-mail</label>
+                                            <input type="text" value="{{ email }}" disabled class="form-control" />
+                                       </div> 
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label>First name</label>
+                                                <input type="text" class="form-control" formControlName="first_name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }" />
+
+                                                <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.first_name.errors.required">Required field</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label>Last name</label>
+                                                <input type="text" class="form-control" formControlName="last_name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }" />
+
+                                                <div *ngIf="submitted && f.last_name.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.last_name.errors.required">Required field</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label>Password (min. length 6 characters)</label>
+                                                <app-password [inputClass]="(submitted && f.password.errors) ? 'is-invalid' : ''" (change)="onPasswordChange($event)"></app-password>
+
+                                                <div *ngIf="submitted && f.password.errors" style="margin-top: 2px; font-size: 80%; color: #dc3545;">
+                                                    <div *ngIf="f.password.errors.required">Required field</div>
+                                                    <div *ngIf="f.password.errors.minlength">Field must be at least 6 char. long</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <button type="submit" class="btn btn-lg btn-outline-success mt-md-4">Finish</button>
+
+                                
+                            </form>
+
+                        </ng-container>
+                        <ng-container *ngIf="step == 3">
+                            <div class="text-center">
+                                <h1 class="mt-0">You've accepted the invitation<br><small>You can now login to the system ...</small></h1>
+                           
+                                <div routerLink="/login" class="btn btn-lg btn-outline-success mt-md-4">Press here to go to the login page</div>
+                            </div>                            
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+</ng-container>

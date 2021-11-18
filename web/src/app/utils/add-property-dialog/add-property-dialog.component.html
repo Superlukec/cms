@@ -1,0 +1,46 @@
+<ng-container *ngIf="!loading">
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate>
+        <h2 mat-dialog-title>Add property</h2>
+        <mat-dialog-content>
+
+            <div class="form-group" *ngIf="data.multilanguage">
+                <label class="center-block mb-0">Language:</label>
+                <select class="form-control form-control-sm" [(ngModel)]="selectedLang" [ngModelOptions]="{standalone: true}" (change)="onChangeLang($event.target.value)">
+                    <option *ngFor="let lang of data.availableLanguages" value="{{ lang.prefix }}">{{ lang.language }}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="center-block mb-0">Property name:</label>
+                <input type="text" class="form-control form-control-sm" formControlName="name" />
+            </div>
+
+            <div class="form-group" *ngIf="categories.length > 0">
+                <label class="center-block mb-0">Select categories:</label>
+                <div *ngFor="let cat of categories" style="font-size: .9rem;">
+                    <mat-checkbox [(ngModel)]="cat.selected"
+                        [ngModelOptions]="{standalone: true}">
+                        
+                        {{ cat.name }}
+
+                        <div class="text-muted text-wrap" style="font-size: .9em;">
+                            
+                            <ng-container *ngFor="let prop of cat.properties; let i = index">
+
+                                {{ prop.name }}<ng-container *ngIf="i != (cat.properties.length - 1)">, </ng-container>
+
+                            </ng-container>
+                            
+                        </div>
+                    
+                    </mat-checkbox>
+                </div>
+            </div>
+
+        </mat-dialog-content>
+        <mat-dialog-actions class="mb-1">
+            <button class="btn btn-primary mr-2" type="submit">Save</button>
+            <button class="btn btn-secondary" [mat-dialog-close]="false">Cancel</button>
+        </mat-dialog-actions>
+    </form>
+</ng-container>

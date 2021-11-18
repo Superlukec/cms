@@ -1,0 +1,9 @@
+<ng-container *ngIf="!page">
+    <app-view-transfer></app-view-transfer>
+</ng-container>
+
+<ng-container *ngIf="page">
+    <ng-container *ngIf="page == 'new'">       
+        <app-new-transfer></app-new-transfer>
+    </ng-container>
+</ng-container>

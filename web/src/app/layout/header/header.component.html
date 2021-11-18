@@ -1,0 +1,108 @@
+<ng-container>
+    <!-- *ngIf="!loading"> -->
+    <div class="admin-header shadow-sm pt-2" *ngIf="isAdmin">
+
+        <div class="d-flex align-items-center">
+
+            <div class="mr-3" *ngIf="layoutSize < 2">
+                <div class="btn btn-sm btn-outline-primary" (click)="showSidebar()">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+
+            <div class="mr-3">
+                <a class="btn btn-sm btn-outline-success" routerLink="/" *ngxPermissionsExcept="['EXCHANGE']">
+                    <i class="fa fa-home"></i> Home page
+                </a>
+            </div>
+
+            <app-search-box></app-search-box>
+       
+
+            <div class="ml-auto">              
+
+                <ul class="list-inline admin-top-menu mb-0">
+                    <li class="list-inline-item">
+                        <a title="Log Out" routerLink="/logout"><i class="fas fa-sign-out-alt"></i></a>
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <ng-container *ngIf="!isAdmin">
+
+        <ng-container *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN', 'EDITOR', 'AUTHOR', 'VISITOR']">
+            <nav class="navbar fixed-top navbar-dark navbar-expand-lg py-1 admin-bar" style="background: #1a1f32; font-size: 0.9rem;">
+
+                <ng-container *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN', 'EDITOR', 'AUTHOR']">
+                    <a class="navbar-brand text-truncate" routerLink="/admin" style="font-size: 1.1rem; max-width: 180px;">{{ siteTitle }}</a>
+                </ng-container>
+                <ng-container *ngxPermissionsOnly="['VISITOR']">
+                    <a class="navbar-brand text-truncate" routerLink="/" style="font-size: 1.1rem; max-width: 180px;">{{ siteTitle }}</a>
+                </ng-container>
+
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav mt-2 mt-lg-0 mr-auto">
+                        <ng-container *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN', 'EDITOR', 'AUTHOR']">
+                            <li class="nav-item">
+                                <a class="nav-link" routerLink="/admin">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" routerLink="/admin/pages">Pages</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" routerLink="/admin/posts">News</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" routerLink="/admin/products">Products</a>
+                            </li>
+                        </ng-container>
+                        <ng-container *ngxPermissionsOnly="['VISITOR']">
+                            <li class="nav-item">
+                                <a class="nav-link" routerLink="/">Home page</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" routerLink="/portal">Portal</a>
+                            </li>
+                        </ng-container>
+                    </ul>
+
+                    <ng-container *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN', 'EDITOR', 'AUTHOR']">
+                        <ng-container *ngIf="link">
+                            <a class="btn btn-success btn-sm" routerLink="{{ link }}">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                        </ng-container>
+                    </ng-container>
+
+                    <ul class="ml-md-3 navbar-nav mt-2 mt-lg-0">
+                        <li class="nav-item pointer">
+                            <i class="fas fa-user" style="color: rgba(255,255,255,.5); font-size: 1.2rem;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                            <div class="dropdown-menu dropdown-menu shadow border-0 dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <ng-container *ngxPermissionsOnly="['SUPER_ADMIN', 'ADMIN', 'EDITOR', 'AUTHOR']">
+                                    <a class="dropdown-item" routerLink="/admin/account-settings">Account settings</a>
+                                    <div class="dropdown-divider"></div>
+                                </ng-container>
+                                <a class="dropdown-item" routerLink="/logout">Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="w-100" style="height: 45px"></div>
+        </ng-container>
+
+        <ng-container *ngIf="visible && html">
+            <div [innerHTML]="html | sanitizeHtml" routeDirective></div>
+        </ng-container>
+    </ng-container>
+</ng-container>

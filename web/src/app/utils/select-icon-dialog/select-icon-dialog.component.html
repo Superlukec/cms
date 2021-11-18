@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Select icon</h2>
+<mat-dialog-content class="mb-2">
+    <app-select-icon [data]="data.icon" (selection)="selectedIcon($event)"></app-select-icon>
+
+    <div class="form-group mt-2 mb-0">
+      <label style="font-size: .8em;" class="text-muted mb-0">Icon</label>
+      <input type="text" class="form-control form-control-sm mb-0" [(ngModel)]="icon" />
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">
+  <button class="btn btn-primary mr-2" (click)="submit()">Select</button>  
+  <button class="btn btn-secondary" [mat-dialog-close]="false">Cancel</button>
+</mat-dialog-actions>

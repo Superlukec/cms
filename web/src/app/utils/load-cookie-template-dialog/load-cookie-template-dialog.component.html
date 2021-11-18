@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Cookie template</h2>
+<mat-dialog-content class="mb-2">
+
+    <label>Choose language</label>
+    <select class="form-control form-control-sm" [(ngModel)]="selectedLang"
+        [ngModelOptions]="{standalone: true}" (change)="onChangeLang($event.target.value)">        
+        <option *ngFor="let t of textTemplate" value="{{ t.lang }}">{{ t.lang }}
+        </option>
+    </select>
+
+    <div class="my-3">
+        <label>Cookie text</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            <div [generateHTML]="selectedText"></div>
+        </div>
+    </div>
+
+    <div class="my-3">
+        <label>Agree text - more information</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            {{ agreeText }}
+        </div>
+    </div>
+
+    
+
+    <div class="my-3">
+        <label>Cookie button - more information</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            {{ moreInfoButton }}
+        </div>
+    </div>
+
+    <div class="my-3">
+        <label>Cookie information - headline</label>
+        <div class="border bg-white p-2 font-italic text-muted" style="font-size: .9em;">        
+            {{ cookieInformation }}
+        </div>
+    </div>
+
+    <div class="my-3" *ngIf="cookies">
+        <label>Cookie description</label>
+
+        <div style="font-size: .8em;">
+            <ng-container *ngFor="let c of cookies">
+                <div class="d-flex">
+                    <div class="text-muted">{{ c.name }}</div>
+                    <div class="ml-2">- {{ c.text }}</div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">
+  <button class="btn btn-secondary mr-2" [mat-dialog-close]>Cancel</button>  
+  <button class="btn btn-primary" (click)="close()">Load template</button>
+</mat-dialog-actions>

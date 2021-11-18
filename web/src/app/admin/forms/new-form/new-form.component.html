@@ -1,0 +1,254 @@
+<ng-container *ngIf="!loading">
+
+    <form [formGroup]="mainForm" (ngSubmit)="onSubmit()" novalidate class="h-100 d-flex flex-column">
+
+        <div class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between px-4">
+
+            <div class="d-flex text-muted">
+            </div>
+
+            <div>
+
+                <div class="btn btn-outline-danger btn" *ngIf="id" (click)="deleteForm()">
+                    <i class="far fa-trash-alt"></i>
+                </div>
+
+                <button class="btn btn-primary ml-4" type="submit"><i class="fas fa-save"></i>&nbsp; Save</button>
+            </div>
+
+        </div>
+
+
+
+        <div class="d-flex h-100">
+            <div class="col h-100" style="overflow-y: auto;">
+                <div class="container h-100">
+
+                    <h4 class="mt-4">                        
+                        <ng-container *ngIf="!id">Add form</ng-container>
+                        <ng-container *ngIf="id">Edit form</ng-container>
+                    </h4>
+
+                    <div class="row">
+                        <div class="col-12">
+
+                            <div class="form-group my-2">
+                                <label>Form name</label>
+                                <input type="text" class="form-control form-control-lg" placeholder="First form" formControlName="name" />
+                            </div>
+
+                            <mat-tab-group>
+                                <mat-tab label="Elements">
+
+                                    <div class="container">
+                                        <div class="row my-4">
+                                            <div class="col-7">
+
+                                                <h5>Form elements</h5>
+
+                                                <div class="my-2" *ngIf="elements.length > 0">
+                                                    <table class="table w-100 bg-white">
+                                                        <tr>
+                                                            <th>Label</th>
+                                                            <th>Name</th>
+                                                            <th>Type</th>
+                                                            <th style="width: 80px;">Required</th>
+                                                            <th style="width: 30px;">&nbsp;</th>
+                                                        </tr>
+                                                        <tr *ngFor="let el of elements; let i = index">
+                                                            <td class="align-middle">{{ el.label }}</td>
+                                                            <td class="align-middle">{{ el.name }}</td>
+                                                            <td class="align-middle">{{ el.type }}</td>
+                                                            <td class="align-middle">
+                                                                <ng-container *ngIf="el.required">
+                                                                    <i class="fas fa-check text-primary"></i>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="!el.required">
+                                                                    <i class="fas fa-times text-danger"></i>
+                                                                </ng-container>
+                                                            </td>
+                                                            <td class="align-middle d-flex">
+                                                                <div class="btn btn-sm btn-outline-primary pointer" (click)="editFormElement(i)">
+                                                                    <i class="fas fa-pencil-alt"></i>
+                                                                </div>
+                                                                <div class="btn btn-sm btn-danger pointer ml-2" (click)="deleteFormElement(i)">
+                                                                    <i class="far fa-trash-alt"></i>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+
+                                                <div class="btn btn-outline-primary btn-sm my-2 pointer" (click)="addElement()">
+                                                    <i class="fas fa-plus"></i>&nbsp; Add element</div>
+
+                                            </div>
+                                            <div class="col-5">
+                                                <h6>Form preview</h6>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div *ngFor="let el of elements">
+
+                                                                    <div class="form-group mb-3" *ngIf="el.type == 'text'">
+                                                                        <label>{{ el.label }} <span *ngIf="el.required" class="text-danger">*</span></label>
+                                                                        <input type="text" class="form-control form-control-sm" />
+                                                                    </div>
+
+                                                                    <div class="form-group mb-3" *ngIf="el.type == 'textarea'">
+                                                                        <label>{{ el.label }} <span *ngIf="el.required" class="text-danger">*</span></label>
+                                                                        <textarea class="form-control form-control-sm"></textarea>
+                                                                    </div>
+
+                                                                    <div class="form-group mb-3" *ngIf="el.type == 'checkbox'">
+
+                                                                        <div class="d-flex">
+                                                                            <div>
+                                                                                <input type="checkbox" />
+                                                                            </div>
+                                                                            <div class="ml-2">
+                                                                                <span *ngIf="el.required" class="text-danger">*</span> {{ el.label }}
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <div class="form-group mb-3" *ngIf="el.type == 'yes_no'">
+
+
+                                                                        <label>{{ el.label }} <span *ngIf="el.required" class="text-danger">*</span>:</label>
+
+                                                                        <select class="form-control form-control-sm">
+                                                                            <option selected="selected">Yes</option>
+                                                                            <option>No</option>
+                                                                        </select>
+
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div *ngIf="elements.length > 0">
+                                                                    <ng-container *ngIf="f.submit_btn.value">
+                                                                        <div class="btn btn-primary btn-sm">{{ f.submit_btn.value }}</div> 
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="!f.submit_btn.value">
+                                                                        <div class="btn btn-primary btn-sm">Submit</div>
+                                                                    </ng-container>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </mat-tab>
+                                <mat-tab label="E-mail">
+                                    <div class="container">
+
+                                        <div class="row my-4">
+
+                                            <div class="col-6">
+
+                                                <div class="form-group my-2">
+                                                    <h5>Recipients</h5>
+                                                    <input type="text" class="form-control" formControlName="recipients" />
+                                                </div>
+
+                                                <div class="form-group my-2 mt-4">
+
+                                                    <h5>E-mail body</h5>
+                                                    <ng-container *ngIf="elements && elements.length > 0">
+                                                        <div class="d-flex">
+                                                            <ul class="list-inline">
+                                                                <li *ngFor="let el of elements"><span ng-non-bindable>{{</span> {{ el.name }} <span ng-non-bindable>}}</span>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </ng-container>
+                                                    <!--<textarea class="form-control html-editor mb-2" formControlName="email" #emailHtml></textarea>-->
+
+                                                    <div class="bg-white border">
+                                                        <app-ckeditor
+                                                            [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'blocks', '|', 'bulletedList', 'numberedList', '|', 'undo', 'redo' ] }"
+                                                            [data]="email" (output)="onCkEditorValue($event)">
+                                                        </app-ckeditor>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </mat-tab>
+                                <mat-tab label="Submit button">
+                                    <div class="container">
+
+                                        <div class="row my-4">
+
+                                            <div class="col-6">
+                                                
+                                                <div class="form-group my-2">
+                                                    <h5>Submit button text</h5>
+                                                    <input type="text" class="form-control" formControlName="submit_btn" placeholder="Submit" />
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </mat-tab>
+                                <mat-tab label="HTML (advanced)">
+                                    
+                                    <ng-template matTabContent>
+                                        <div class="my-4">
+                                            <ng-container *ngIf="elements && elements.length > 0">
+                                                    Available elements:
+
+                                                    <ul class="list-unstyled border px-2 bg-light my-2">                                                        
+                                                        <li *ngFor="let el of elements" class="mb-2">
+                                                            <div *ngIf="el.type == 'text'">
+                                                                <code>&lt;input type="text" class="form-control form-control-sm" name="{{ el.name }}" <ng-container *ngIf="el.required">required</ng-container> /&gt;</code>
+                                                            </div>
+                                                            <div *ngIf="el.type == 'textarea'">
+                                                                <code>&lt;textarea class="form-control form-control-sm" name="{{ el.name }}" <ng-container *ngIf="el.required">required</ng-container>&gt;&lt;/textarea&gt;</code>
+                                                            </div>
+                                                            <div *ngIf="el.type == 'checkbox'">
+                                                                <code>&lt;input type="checkbox" class="form-control form-control-sm" name="{{ el.name }}" <ng-container *ngIf="el.required">required</ng-container> /&gt;</code>
+                                                            </div>
+                                                        </li>
+                                                        <li class="mb-2">
+                                                            <code>&lt;input class="btn btn-primary" type="submit" value="Submit" /&gt;</code>
+                                                        </li>
+                                                    </ul>
+                                            </ng-container>
+
+                                            <div class="mt-4 mb-2">Custom HTML for form:</div>
+                                            
+                                            <app-insert-html (output)="onHTMLData($event)" [data]="f.html.value"></app-insert-html>
+
+                                            <div class="my-2 font-italic">Leave empty for a default template.</div>
+
+                                        </div>
+                                    </ng-template>
+                                    
+                                </mat-tab>
+                            </mat-tab-group>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+</ng-container>

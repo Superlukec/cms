@@ -1,0 +1,8 @@
+<select [(ngModel)]="selectedRole" class="custom-select" (change)="onChange($event.target.value)">
+    <option value="5">Exchange</option>
+    <option value="4">Visitor</option>
+    <option value="3">Author</option>
+    <option value="2">Editor</option>
+    <option value="1">Admin</option>
+    <option value="0">Super Admin</option>
+</select>

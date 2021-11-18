@@ -1,0 +1,509 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$web-primary: mat-palette($mat-indigo);
+$web-accent: mat-palette($mat-pink, A200, A100, A400);
+// The warn palette is optional (defaults to red).
+$web-warn: mat-palette($mat-red);
+// Create the theme object (a Sass map containing all of the palettes).
+$web-theme: mat-light-theme($web-primary, $web-accent, $web-warn);
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($web-theme);
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
+/**
+  * Global styles
+  */
+
+$font-size: 14px;
+$admin-default-font: #212529;
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@include media-breakpoint-up(md) {
+    .container-narrow {
+        width: 800px;
+    }
+}
+
+.bg-1 {
+    background: url('/assets/bg1.jpg') no-repeat top center;
+}
+
+
+/**
+  * Utility classes 
+  */
+
+.pointer {
+    cursor: pointer;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.btn-circle {
+    border-radius: 50%;
+}
+
+.border-dashed {
+    border-style: dashed !important;
+}
+
+.sys-label {
+    color: rgba(0, 0, 0, 0.54);
+    //font-size: 0.9em;
+    border-bottom: 1px solid rgba(0, 0, 0, .1)
+}
+
+.text-blue {
+    color: #3989C9;
+}
+
+.text-sm {
+    font-size: 0.9em;
+}
+
+.component-selected-border {
+    border-color: #5aa4f4 !important;
+}
+
+.component-selected-border-inner {
+    border-color: #f3141d !important;
+}
+
+
+/**
+  * snackbar
+  */
+.error-snackbar {
+    background: #dc3545;
+}
+
+
+/**
+  * browserupgrade
+  */
+
+  .browserupgrade {
+    display: none;
+}
+
+
+/**
+  * Image editing overlay buttons
+  */
+
+.inner-container {
+    position: relative;
+    width: 100%;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #1a1f32;
+}
+
+.inner-container:hover .overlay {
+    opacity: .7;
+}
+
+.large-fonts-button i {
+    font-size: 2em;
+}
+
+
+/**
+  * Editor style - icons
+  */
+
+$light-gray: #808690;
+$primary-blue: #007bff;
+.editor-components {
+    color: $light-gray;
+    .element {
+        margin-top: 1em;
+        margin-bottom: 1em;
+        &:hover {
+            cursor: pointer;
+            color: $primary-blue;
+        }
+        i {
+            margin-bottom: 10px;
+            font-size: 1.6em;
+        }
+        div {
+            font-size: 0.9em;
+        }
+    }
+}
+
+
+/**
+  * Admin panel
+  */
+
+$admin-bg: #f0f4f9;
+.admin-bg {
+    background: $admin-bg;
+    color: $admin-default-font;
+}
+
+.admin-bg {
+    font-size: $font-size;
+}
+
+/**
+  * Admin 
+  */ 
+.admin-bar {
+    font-family: 'Open Sans';
+    z-index: 99999!important;
+}
+
+/**
+  * Admin sidebar
+  */
+
+$admin-sidebar-background: #1a1f32;
+$admin-sidebar-highlight: #0a1124;
+$admin-sidebar-background-2: #161b2e;
+$admin-sidebar-fonts: #9ea4b0;
+$admin-title-color: #fff;
+$admin-header-title-height: 48px;
+.admin-menu {
+    font-family: 'Open Sans';
+
+    .main-admin-list > li {
+        margin-bottom: .4rem;
+    }
+
+    //width: 190px;
+    background: $admin-sidebar-background;
+    color: $admin-sidebar-fonts;
+    .header-title {
+        //height: $admin-header-title-height;        
+
+        .header-text {
+            color: $admin-title-color;
+            font-weight: bold;
+            //font-size: 1.2rem;
+        }
+
+        .version-number {
+            font-size: .8rem;
+        }
+    }
+    .avatar-container {
+        /*
+        background: $admin-sidebar-background-2;
+        background: linear-gradient(180deg, rgba(105,114,147,.3) 0%, rgba(22,27,46,1) 100%);
+        -moz-box-shadow:    inset 0 0 4px #000000;
+        -webkit-box-shadow: inset 0 0 4px #000000;
+        box-shadow:         inset 0 0 4px #000000;*/
+        background: #0a1124;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        .avatar {
+            width: 40px;
+            height: 40px;
+            padding-top: 10px;
+            padding-left: 12px;
+            margin-right: 1rem;
+            background: $admin-sidebar-highlight;
+            border-radius: 50%;
+            i {
+                font-size: 1rem;
+            }
+        }
+        .name {
+            width: 100px;
+        }
+    }
+    li>a {
+        padding: 0.4rem;
+        padding-left: 1rem;
+        color: $admin-sidebar-fonts;
+        display: block;
+        &:hover,
+        &.active {
+            text-decoration: none;
+            background: $admin-sidebar-highlight;
+            i {
+                color: #fff;
+            }
+        }
+        &.active+.submenu a {
+            display: block;
+            text-decoration: none;
+            background: $admin-sidebar-highlight;
+            border-left: 4px solid $primary-blue;
+        }
+    }    
+    .submenu a {        
+        display: none;
+        padding: .5rem;
+        padding-left: 2rem;     // 3rem
+        font-size: 0.9em;
+    }
+    .sub-active {
+        //font-weight: 600;
+        color: $admin-title-color;
+    }
+}
+
+@media (max-width: 575px) {
+    .admin-menu {
+        width: 230px;
+        position: absolute;
+        z-index: 9999;
+    }
+}
+
+
+/* Small devices (landscape phones, 576px and up) */
+
+@media (min-width: 576px) {
+    .admin-menu {
+        width: 220px;
+    }
+}
+
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+
+@media (min-width: 768px) {
+    .admin-menu {
+        width: 220px;
+    }
+}
+
+
+/* Large devices (desktops, 992px and up) */
+
+@media (min-width: 992px) {
+    .admin-menu {
+        width: 240px;
+    }
+}
+
+
+/* Extra large devices (large desktops, 1200px and up) */
+
+@media (min-width: 1200px) {}
+
+
+/**
+  * Admin header
+  */
+
+$admin-header-background: #fff;
+$admin-header-border: #dae2ec;
+$admin-header-height: 50px;
+.admin-header {
+    width: 100%;
+    height: $admin-header-height;
+    padding-left: 20px;
+    padding-right: 30px;
+    background: $admin-header-background;
+    border-bottom: 2px solid $admin-header-border;
+    .admin-search-form {
+        padding-top: 13px;
+        color: #a7adb8;
+        input {
+            border: 0px;
+        }
+    }
+    .admin-top-menu {
+        //margin-top: 12px;
+        li {
+            margin-left: 15px;
+        }
+        a {
+            color: #9ea4b0;
+        }
+
+        i {
+            color: #9ea4b0;
+            font-size: 1.4rem;
+            &:hover {
+                cursor: pointer;
+                color: $admin-default-font;
+            }
+        }
+    }
+}
+
+
+
+
+.overflow-y {
+    overflow-y: auto;
+}
+
+
+.login-bg {
+    background: #e1e9f4; //#1a1f32;
+}
+
+.login-form {
+    .login-title {
+        color: #1a1f32;
+        font-size: 2.2rem;
+        font-weight: 300;
+    }
+    label {
+        color: #1a1f32;
+    }
+    /*
+    .box {
+        color: #1a1f32;
+        border: 1px solid #ccc;
+
+        input.form-control {
+            //background: none;
+            color: #1a1f32;
+            border: 1px solid #ccc;
+        }
+    }*/
+}
+
+@media (max-width: 575px) {
+    .login-form {
+        margin-top: 0px;
+    }
+}
+
+.sidebar-option {
+    width: 250px;
+    background: #fff;
+    height: 100%;
+}
+
+@media (max-width: 575px) {
+    .sidebar-option {
+        position: absolute;
+        right: 0;
+        height: calc(100% - 104px);
+        z-index: 9999;
+        border-left: 1px solid #eee;
+    }
+}
+
+
+/* Small devices (landscape phones, 576px and up) */
+
+@media (min-width: 576px) {}
+
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+
+@media (min-width: 768px) {}
+
+
+/* Large devices (desktops, 992px and up) */
+
+@media (min-width: 992px) {}
+
+
+/* Extra large devices (large desktops, 1200px and up) */
+
+@media (min-width: 1200px) {}
+
+// component gallery
+.gallery .img {
+    height: 150px;
+}
+
+
+// tabs - components 
+.show-tabs {
+    table {
+        width: 100%;
+
+        td {
+            border: 0px;
+        }
+    }
+}
+
+
+// page loader
+.card-loader {
+    background-color: #fff;
+    padding: 8px;
+    position: relative;
+    border-radius: 2px;
+    margin-bottom: 0;
+    overflow: hidden;
+  
+    &:only-child {
+      margin-top:0;
+    }
+  
+    &:before {
+      content: '';
+      height: 40px;
+      display: block;
+      background-color: #ededed;      
+    }
+  
+    &:after {
+      content: '';
+      background-color: #333;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation-duration: 0.6s;
+      animation-iteration-count: infinite;
+      animation-name: loader-animate;
+      animation-timing-function: linear;
+      background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 30%, rgba(255,255,255,0) 81%);
+      background: -o-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 30%, rgba(255,255,255,0) 81%);
+      background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 30%, rgba(255,255,255,0) 81%);
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#00ffffff',GradientType=1 );
+    }
+  }
+   
+  
+  // Loader animation
+  @keyframes loader-animate{
+   0%{
+      transform: translate3d(-100%, 0, 0);
+    }
+   100%{
+      transform: translate3d(100%, 0, 0);
+    }
+  }

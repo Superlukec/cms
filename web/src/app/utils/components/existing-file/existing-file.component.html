@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>Select file</h2>
+<mat-dialog-content class="mb-2">
+  
+    <ng-container *ngIf="loading">
+        <div class="row">
+            <div class="col my-5">
+                <div class="d-flex justify-content-center">
+                <img src="/assets/preloader.gif">
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading">
+
+        <div class="my-2">
+
+            <ng-container *ngIf="files.length == 0">
+                No files available.
+            </ng-container>
+
+            <ng-container *ngIf="files.length > 0">
+  
+
+                <div class="d-flex flex-row flex-wrap">
+
+                    <ng-container *ngFor="let f of files">
+
+                        <ng-container *ngIf="f.url">
+
+                            <div class=" w-50" (click)="selectImage(f._id)">
+                                
+                                <div class="m-2 border pointer p-2"  [ngClass]="{ 'border-primary' : f.selected }">
+                                
+                                
+                                    <div class="d-flex align-items-center">
+
+                                        
+
+                                        <ng-container *ngIf="development">
+                                            <div style="width: 180px; height: 80px; background-position: center; background-size: contain; background-repeat: no-repeat;" [ngStyle]="{backgroundImage: 'url(http://localhost:1339' + f.url + ')'}">                                            
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!development">
+                                            <div style="width: 180px; height: 80px; background-position: center; background-size: contain; background-repeat: no-repeat;" [ngStyle]="{backgroundImage: 'url(' + f.url + ')'}">                                            
+                                            </div>
+                                        </ng-container>
+
+                                        <div class="w-50 ml-2 text-truncate" style="font-size: 0.8em;">
+                                            {{ f.original_name }}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                
+                            </div>
+                        </ng-container>
+
+                    </ng-container>
+                </div>
+
+
+            </ng-container>
+
+        </div>
+        
+    </ng-container>
+
+</mat-dialog-content>
+<mat-dialog-actions class="my-2">
+  <button class="btn btn-outline-primary mr-2" [mat-dialog-close]>Cancel</button>    
+
+  <button class="btn btn-primary mr-2" [mat-dialog-close]="selected" *ngIf="selected">Select</button>    
+
+</mat-dialog-actions>

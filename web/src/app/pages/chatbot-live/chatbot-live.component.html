@@ -1,0 +1,7 @@
+<div class="_chatbot-container d-flex" *ngIf="!isWorkingHoursEnabled">
+    
+    <ng-container *ngFor="let c of chatbot">        
+        <app-chatbot-box [id]="c.chat_id" [settings]="settings" [text]="text" ></app-chatbot-box>
+    </ng-container>
+
+</div>

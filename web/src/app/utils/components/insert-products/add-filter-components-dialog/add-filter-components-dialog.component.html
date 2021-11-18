@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>Add category / property</h2>
+<mat-dialog-content class="mb-2">
+ 
+    <div class="mb-3">
+        Category
+        <div class="p-2 border">
+            <ul class="list-unstyled">
+                <li *ngFor="let c of categories">
+
+                    <mat-checkbox [(ngModel)]="c.selected" [ngModelOptions]="{standalone: true}">
+                        {{ c.name }}
+                        <div class="text-muted text-wrap" style="font-size: .9em;">
+                            
+                            <ng-container *ngFor="let prop of c.properties; let i = index">
+
+                                {{ prop.name }}<ng-container *ngIf="i != (c.properties.length - 1)">, </ng-container>
+
+                            </ng-container>
+                            
+                        </div>
+                    </mat-checkbox>
+
+                    
+                
+
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        Properties
+        <div class="p-2 border">
+            <ul class="list-unstyled">
+                <li *ngFor="let p of properties">
+
+                    <mat-checkbox [(ngModel)]="p.selected" [ngModelOptions]="{standalone: true}">{{ p.name }}</mat-checkbox>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">  
+  <button class="btn btn-outline-secondary mr-2" [mat-dialog-close]="false">Cancel</button>
+  <button class="btn btn-primary " (click)="addAndSave()">Add</button>  
+</mat-dialog-actions>

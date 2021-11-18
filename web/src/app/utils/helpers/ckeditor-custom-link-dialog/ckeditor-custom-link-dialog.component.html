@@ -1,0 +1,41 @@
+<ng-container *ngIf="!loading">
+
+    <h2 mat-dialog-title>Add link</h2>
+
+    <mat-dialog-content class="mb-2">
+
+        <div class="form-group">
+            <label>Custom link</label>
+            <input class="form-control form-control-sm" (change)="finishWithLink(link)" [(ngModel)]="link" placeholder="https://google.com" [ngClass]="{ 'border-danger': validLink == false }" />
+            <div class="text-danger" style="font-size: .7rem" *ngIf="validLink == false">
+                Please enter a valid link
+            </div>
+        </div>
+
+        <div class="my-3 text-center" style="padding-top: 5px;">
+            <hr />
+
+            <div class="d-flex justify-content-center align-items-center w-100">
+                <div class="bg-white text-muted" style="margin-top: -30px; width: 50px;">or</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input class="form-control form-control-sm" [(ngModel)]="search" (ngModelChange)="applyFilter(search)"  placeholder="Search for page / posts ..." />
+
+            <div class="mt-2 border" style="height: 150px; overflow-y: auto;">
+                <table id="page-links" class="table table-sm table-striped">
+                    <tr *ngFor="let page of pagesList; let i = index;" [ngClass]="{ 'active': page.active }" (click)="selectPost(i)" (dblclick)="selectAndClose(i)">
+                        <td>{{ page.title }}</td>
+                        <td><span class="text-muted font-italic" style="font-size: 0.8rem">{{ page.type }}</span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </mat-dialog-content>
+    <mat-dialog-actions class="mb-1">
+        <button class="btn btn-outline-primary mr-2" (click)="chooseLink()">Select</button>
+        <button class="btn btn-outline-secondary" [mat-dialog-close]="">Cancel</button>
+    </mat-dialog-actions>
+</ng-container>

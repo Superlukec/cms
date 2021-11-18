@@ -1,0 +1,5 @@
+<app-show-templates *ngIf="!page"></app-show-templates>
+
+<app-new-template *ngIf="page == 'new'"></app-new-template>
+
+<app-new-template [id]="templateId" *ngIf="templateId && page != 'new'"></app-new-template>

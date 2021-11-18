@@ -1,0 +1,21 @@
+{
+    "env": {
+        "browser": false,
+        "commonjs": true,
+        "es2021": true,
+        "node": true,
+        "mocha": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 12
+    },
+    "rules": {     
+        "quotes": [
+            "warn",
+            "single"
+          ],   
+        "no-unused-vars": "warn",
+        "complexity": ["warn", 5]
+    }
+}
